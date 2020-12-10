@@ -44,6 +44,7 @@ CREATE TABLE pi8 (
   id              serial,
   "Space Left"    real,
   "New Videos"       integer,
+  "Last Ran"         timestamp,
   "Device"         varchar(255)
 );
 
@@ -56,10 +57,22 @@ CREATE TABLE win (
   "Device"         varchar(255)
 );
 
+CREATE TABLE mom (
+  id              serial,
+
+  "Transcoding"       integer,
+  "Transferring"     integer,
+  "Waiting"           integer,
+
+  "Last Ran"         timestamp,
+  "Device"         varchar(255)
+);
+
 #### add dummy row to initialize
 INSERT INTO pi4 ("Device") VALUES ('Pi 4');
 INSERT INTO pi8 ("Device") VALUES ('Pi 8');
 INSERT INTO win ("Device") VALUES ('Windows');
+INSERT INTO win ("Device") VALUES ('Server');
 
 #### update in code
 UPDATE pi4 SET "Space Left"={space}, "Completed"={completed}, "Downloading"={downloading}, "Total"={total}, "Last Ran"=\'{lastRan}\', "Transferring"={transferring} WHERE id=1;
@@ -70,6 +83,7 @@ UPDATE win SET "Transcoding"={transcoding}, "Transferring"={transferring}, "Wait
 drop table pi4;
 drop table pi8;
 drop table win;
+drop table mom;
 
 _____________________________________________________________________________________
 
