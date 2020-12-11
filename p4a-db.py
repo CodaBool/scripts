@@ -18,19 +18,13 @@ def executeQuery(cursor, connection):
   transferring = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output("python3 /home/codabool/scripts/count-simple.py /docks False", shell=True)))
   space = getSpace()
   lastRan = datetime.now()
-  print(f'UPDATE pi4 SET "Space Left"={space}, "Completed"={completed}, "Downloading"={downloading}, "Total"={total}, "Last Ran"=\'{lastRan}\', "Transferring"={transferring} WHERE id=1;')
-  # cursor.execute(f'UPDATE pi4 SET "Space Left"={space}, "Completed"={completed}, "Downloading"={downloading}, "Total"={total}, "Last Ran"=\'{lastRan}\', "Transferring"={transferring} WHERE id=1;') # syntax requires > python 3.6 
+  # print(f'UPDATE p4a SET "Space Left"={space}, "Completed"={completed}, "Downloading"={downloading}, "Total"={total}, "Last Ran"=\'{lastRan}\', "Transferring"={transferring} WHERE id=1;')
+  cursor.execute(f'UPDATE p4a SET "Space Left"={space}, "Completed"={completed}, "Downloading"={downloading}, "Total"={total}, "Last Ran"=\'{lastRan}\', "Transferring"={transferring} WHERE id=1;') # syntax requires > python 3.6 
 
 try:
   load_dotenv()
-  print(os.getenv('URI'))
-  connection = psycopg2.connect( # os.getenv('URI')
-    host='ec2-54-84-98-18.compute-1.amazonaws.com',
-    database='d376p41o8fn3mh',
-    user='psnpsggrdczrwp',
-    password='9d511f208454d1f0bbdfa8858c3a00c1a35c74c42ffcbba2bfa6586e61cf19c6',
-    connect_timeout=5
-  )
+  # print(os.getenv('URI'))
+  connection = psycopg2.connect(os.getenv('URI'))
   cursor = connection.cursor()
   executeQuery(cursor, connection)
   connection.commit()

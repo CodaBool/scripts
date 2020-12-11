@@ -4,9 +4,9 @@ import subprocess
 from os.path import join, isdir, isfile
 from dotenv import load_dotenv
 
-# python /home/codabool/Downloads/codadash-scripts/ship-pi4.py /home/codabool/Downloads/ROOT/ \"n\"
+# python /home/codabool/Downloads/codadash-scripts/ship-p4a.py /home/codabool/Downloads/ROOT/ \"n\"
 
-ROOT = "/home/codabool/Downloads/docks/"
+ROOT = "/docks/"
 
 def getListOfFiles(directory): # create a list of file and sub directories
   listOfFile = os.listdir(directory) # names in the given directory
@@ -94,13 +94,13 @@ def moveFolder(listOfFiles, auto):
       print("rm -rf \"" + readyFolderPath + "\"")
       os.system("rm -rf \"" + readyFolderPath + "\"")
 
-if isfile("/home/codabool/Documents/shipping.started"):
-  print("Shipment in progress try again later.\nTo force start remove ~/Documents/shipping.started")
+if isfile("/home/codabool/shipping.started"):
+  print("Shipment in progress try again later.\nTo force start remove ~/shipping.started")
 else:
-  os.system("touch /home/codabool/Documents/shipping.started")
+  os.system("touch /home/codabool/shipping.started")
   TYPES = ['mp4', 'mkv', 'avi']
   directory = sys.argv[1]
   auto = sys.argv[2]
   # writeDestination(directory)
   moveFolder(getListOfFiles(directory), auto)
-  os.system("rm /home/codabool/Documents/shipping.started")
+  os.system("rm /home/codabool/shipping.started")

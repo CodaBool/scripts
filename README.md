@@ -2,10 +2,10 @@
 - add to log if transcode takes very little time
 - create script that checks if video files are small
 - make logs append and only be cleared every week
-- add test if there is a 'shipment in progress file in pi4 Documents'
+- add test if there is a 'shipment in progress file in p4a Documents'
 
 # Working
-- pi4 dock
+- p4a dock
 - win dock
 - pi8 dock (unfinished)
 
@@ -86,7 +86,7 @@ drop table mom;
 _____________________________________________________________________________________
 
 # Bashrc
-## pi4 /etc/bash.bashrc
+## p4a /etc/bash.bashrc
 alias pi="ssh codabool@192.168.1.32"
 function m() {
   scp -r "$PWD" codabool@192.168.1.32:/mnt/sd1/raw/
@@ -95,12 +95,12 @@ function m() {
 ## pi8 /etc/bash.bashrc
 alias umnt="sudo umount /mnt/sd1"
 alias mnt="sudo mount -o rw,users,uid=1000,umask=0001 /dev/sda1 /mnt/sd1"
-alias pi4="ssh codabool@192.168.1.16"
+alias p4a="ssh codabool@192.168.1.16"
 
 # win ~/.bashrc
 alias transcode-all="python /d/utilities/codadash-scripts/tran-win.py ./ y n 24"
-alias pi4="ssh codabool@192.168.1.34"
-alias pi4-get="sftp codabool@192.168.1.34:/home/codabool/Downloads/qbit/complete"
+alias p4a="ssh codabool@192.168.1.34"
+alias p4a-get="sftp codabool@192.168.1.34:/home/codabool/Downloads/qbit/complete"
 alias pi8="ssh codabool@192.168.1.32"
 alias transcode-docks="python /d/utilities/codadash-scripts/manage-docks-windows.py"
 alias count-type="python /d/utilities/codadash-scripts/count-simple.py ./ True"
