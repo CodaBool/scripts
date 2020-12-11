@@ -29,7 +29,7 @@ ________________________________________________________________________________
 
 # Database
 #### create tables
-CREATE TABLE pi4 (
+CREATE TABLE p4a (
   id              serial,
   "Space Left"    real,
   "Completed"       integer,
@@ -40,7 +40,7 @@ CREATE TABLE pi4 (
   "Device"         varchar(255)
 );
 
-CREATE TABLE pi8 (
+CREATE TABLE p8a (
   id              serial,
   "Space Left"    real,
   "New Videos"       integer,
@@ -59,28 +59,26 @@ CREATE TABLE win (
 
 CREATE TABLE mom (
   id              serial,
-
   "Transcoding"       integer,
-  "Transferring"     integer,
-  "Waiting"           integer,
-
+  "Ready"           integer,
+  "Status"         varchar(255),
   "Last Ran"         timestamp,
   "Device"         varchar(255)
 );
 
 #### add dummy row to initialize
-INSERT INTO pi4 ("Device") VALUES ('Pi 4');
-INSERT INTO pi8 ("Device") VALUES ('Pi 8');
+INSERT INTO p4a ("Device") VALUES ('Pi 4 a');
+INSERT INTO p8a ("Device") VALUES ('Pi 8 a');
 INSERT INTO win ("Device") VALUES ('Windows');
-INSERT INTO win ("Device") VALUES ('Server');
+INSERT INTO mom ("Device") VALUES ('Server');
 
 #### update in code
-UPDATE pi4 SET "Space Left"={space}, "Completed"={completed}, "Downloading"={downloading}, "Total"={total}, "Last Ran"=\'{lastRan}\', "Transferring"={transferring} WHERE id=1;
+UPDATE p4a SET "Space Left"={space}, "Completed"={completed}, "Downloading"={downloading}, "Total"={total}, "Last Ran"=\'{lastRan}\', "Transferring"={transferring} WHERE id=1;
 UPDATE pi8 SET "Space Left"={space}, "New Videos"={new}, "Last Ran"=\'{lastRan}\'  WHERE id=1;
 UPDATE win SET "Transcoding"={transcoding}, "Transferring"={transferring}, "Waiting"={waiting}, "Last Ran"=\'{lastRan}\' WHERE id=1;
 
 #### drop tables
-drop table pi4;
+drop table p4a;
 drop table pi8;
 drop table win;
 drop table mom;
