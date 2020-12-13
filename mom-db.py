@@ -22,11 +22,11 @@ def executeQuery(cursor, connection):
   # externalSpace = getExternalSpace()
   lastRan = datetime.now()
   print(f'UPDATE pi8 SET "Space Left"={space}, "New Videos"={new}, "Last Ran"=\'{lastRan}\' WHERE id=1;')
-  cursor.execute(f'UPDATE pi8 SET "Space Left"={space}, "New Videos"={new}, "Last Ran"=\'{lastRan}\' WHERE id=1;') # syntax requires > python 3.6
+  # cursor.execute(f'UPDATE pi8 SET "Space Left"={space}, "New Videos"={new}, "Last Ran"=\'{lastRan}\' WHERE id=1;') # syntax requires > python 3.6
 
 try:
   load_dotenv()
-  connection = psycopg2.connect(os.getenv('URI_HEROKU'))
+  connection = psycopg2.connect(os.getenv('URI'))
   cursor = connection.cursor()
   executeQuery(cursor, connection)
   connection.commit()
