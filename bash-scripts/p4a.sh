@@ -14,7 +14,7 @@ if [ $PROCESS_NUM -eq 1 ]; then
 else
   printf "Qbittorrent: ${RED}Stopped${NC}\n"
 fi
-printf "\n================ Checking VPN ===================\n"
+printf "\nChecking VPN...\n\n"
 protonvpn status
 
 printf "\n================ ...Happy Torrenting ===================\n\n"
