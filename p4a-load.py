@@ -21,15 +21,12 @@ def placeShippingFile(listOfFiles):
     alreadyLoaded = False
 
     print('\n==================')
-    print(_file[31:])
-    winShipCount = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output('ls -dq \"' + _file + '\"/ship.win | wc -l', shell=True)))
-    if winShipCount == '1': # windows
-      print('this is a windows shipment')
-      alreadyLoaded = True
+    print('1', _file)
+    print('2', _file[31:])
 
-    piShipCount = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output('ls -dq \"' + _file + '\"/ship.pi8 | wc -l', shell=True)))
-    if piShipCount == '1': # pi8
-      print('this is a pi8 shipment')
+    momLoadCount = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output('ls -dq \"' + _file + '\"/ship.mom | wc -l', shell=True)))
+    if momLoadCount == '1': # mom
+      print('this is a mom shipment')
       alreadyLoaded = True
 
     date1 = datetime.strptime(time.ctime(os.path.getctime(_file)), "%a %b %d %H:%M:%S %Y") # make ctime into datetime
@@ -38,10 +35,10 @@ def placeShippingFile(listOfFiles):
     if dif > 1 and not alreadyLoaded:
       print("Time allotted, preping folder for shipping", _file)
       print('touch \'' + _file + '/ship.' + SHIPMENT_DESTINATION + '\'')
-      os.system('touch \"' + _file + '/ship.win\"')
+      # os.system('touch \"' + _file + '/ship.win\"')
     print('==================\n')
     
 
-SHIPMENT_DESTINATION = 'win'
-ROOT = "/home/codabool/Downloads/docks"
+SHIPMENT_DESTINATION = 'mom'
+ROOT = "/docks"
 placeShippingFile(getListOfFiles(ROOT))
