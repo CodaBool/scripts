@@ -33,10 +33,10 @@ def moveFolder(listOfFiles):
       
       print("\nSSH Copy of folder " + readyFolderName)
       print("DEBUG " + "scp -r \"" + readyFolderPath + "\" " + SSH + ":/mnt/sd1/ven/media/new")
-      os.system("scp -r \"" + readyFolderPath + "\" " + SSH + ":/mnt/sd1/ven/media/new")
+      # os.system("scp -r \"" + readyFolderPath + "\" " + SSH + ":/mnt/sd1/ven/media/new")
       print("SSH Adding im.done file")
       print("DEBUG " + "scp " + SCRIPTS_HOME + "im.done " + SSH + ":\'\"/mnt/sd1/ven/media/new/" + readyFolderName + "\"\'")
-      os.system("scp " + SCRIPTS_HOME + "im.done " + SSH + ":\'\"/mnt/sd1/ven/media/new/" + readyFolderName + "\"\'")
+      # os.system("scp " + SCRIPTS_HOME + "im.done " + SSH + ":\'\"/mnt/sd1/ven/media/new/" + readyFolderName + "\"\'")
       print("SSH Copy Complete\n\nRemoving shipment folder from docks")
       print("rm -rf \"" + readyFolderPath + "\"")
       # os.system("rm -rf \"" + readyFolderPath + "\"")

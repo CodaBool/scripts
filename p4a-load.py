@@ -17,6 +17,8 @@ def getListOfFiles(directory): # create a list of file and sub directories
 def placeShippingFile(listOfFiles):
   for _file in listOfFiles:
     print('\n==================')
+    print(_file)
+    print('DEBUG ...', _file[12:])
     print('searching folder ...', _file[7:]) # print just the relative folder
     if isfile(_file + "/ship.mom"):
       print('label already found in folder')
