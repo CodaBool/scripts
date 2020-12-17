@@ -21,11 +21,10 @@ def placeShippingFile(listOfFiles):
     alreadyLoaded = False
 
     print('\n==================')
-    print('1', _file)
-    print('2', _file[31:])
+    print('file =', _file)
 
-    momLoadCount = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output('ls -dq \"' + _file + '\"/ship.mom | wc -l', shell=True)))
-    if momLoadCount == '1': # mom
+    isLoaded = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output('if [ -f "' + _file + '/ship.mom" ]; then echo "true"; else echo "false"; fi', shell=True)))
+    if isLoaded == 'true':
       print('this is a mom shipment')
       alreadyLoaded = True
 
