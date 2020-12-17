@@ -22,8 +22,8 @@ def countVideos(listOfFiles):
         totalVideos += 1
   return totalVideos
 
-def moveFolder(listOfFiles):
-  print(countVideos(listOfFiles), "videos found in")
+def moveFolder(listOfFiles, isMovie):
+  print(countVideos(listOfFiles), "videos found")
   for _file in listOfFiles:
     if "ship.mom" in _file:
       pathArr = _file.split("/")
@@ -31,14 +31,25 @@ def moveFolder(listOfFiles):
       readyFolderName = pathArr[-2:][0]
       
       print("\nSSH Copy of folder " + readyFolderName)
-      print("DEBUG " + "scp -r \"" + readyFolderPath + "\" " + SSH + ":/mnt/sd1/ven/media/new")
-      # os.system("scp -r \"" + readyFolderPath + "\" " + SSH + ":/mnt/sd1/ven/media/new")
-      print("SSH Adding im.done file")
-      print("DEBUG " + "scp " + SCRIPTS_HOME + "im.done " + SSH + ":\'\"/mnt/sd1/ven/media/new/" + readyFolderName + "\"\'")
-      # os.system("scp " + SCRIPTS_HOME + "im.done " + SSH + ":\'\"/mnt/sd1/ven/media/new/" + readyFolderName + "\"\'")
-      print("SSH Copy Complete\n\nRemoving shipment folder from docks")
-      print("rm -rf \"" + readyFolderPath + "\"")
-      # os.system("rm -rf \"" + readyFolderPath + "\"")
+      if isMovie == True:
+        print("DEBUG " + "scp -r \"" + readyFolderPath + "\" " + SSH + ":/mnt/sd1/ven/media/movies")
+        # os.system("scp -r \"" + readyFolderPath + "\" " + SSH + ":/mnt/sd1/ven/media/movies")
+        print("SSH Adding im.done file")
+        print("DEBUG " + "scp " + SCRIPTS_HOME + "im.done " + SSH + ":\'\"/mnt/sd1/ven/media/movies/" + readyFolderName + "\"\'")
+        # os.system("scp " + SCRIPTS_HOME + "im.done " + SSH + ":\'\"/mnt/sd1/ven/media/movies/" + readyFolderName + "\"\'")
+        print("SSH Copy Complete\n\nRemoving shipment folder from docks")
+        print("rm -rf \"" + readyFolderPath + "\"")
+        # os.system("rm -rf \"" + readyFolderPath + "\"")
+      else:
+        print("DEBUG " + "scp -r \"" + readyFolderPath + "\" " + SSH + ":/mnt/sd1/ven/media/shows")
+        # os.system("scp -r \"" + readyFolderPath + "\" " + SSH + ":/mnt/sd1/ven/media/shows")
+        print("SSH Adding im.done file")
+        print("DEBUG " + "scp " + SCRIPTS_HOME + "im.done " + SSH + ":\'\"/mnt/sd1/ven/media/shows/" + readyFolderName + "\"\'")
+        # os.system("scp " + SCRIPTS_HOME + "im.done " + SSH + ":\'\"/mnt/sd1/ven/media/shows/" + readyFolderName + "\"\'")
+        print("SSH Copy Complete\n\nRemoving shipment folder from docks")
+        print("rm -rf \"" + readyFolderPath + "\"")
+        # os.system("rm -rf \"" + readyFolderPath + "\"")
+
 
 MOVIE_DIR = "/docks/movie/"
 SHOWS_DIR = "/docks/shows/"
@@ -49,9 +60,11 @@ SCRIPTS_HOME = '/home/codabool/scripts/'
 print('\n==================')
 moveMovie = sys.argv[1]
 if moveMovie == 'true':
-  moveFolder(getListOfFiles(MOVIE_DIR))
+  print('checking for movies')
+  moveFolder(getListOfFiles(MOVIE_DIR), True)
 else:
-  moveFolder(getListOfFiles(SHOWS_DIR))
+  print('checking for shows')
+  moveFolder(getListOfFiles(SHOWS_DIR), False)
 
 
 # if isfile(ROOT + "shipping.started"):
