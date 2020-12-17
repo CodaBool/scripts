@@ -23,8 +23,7 @@ def countVideos(listOfFiles):
   return totalVideos
 
 def moveFolder(listOfFiles):
-  videosFound = countVideos(listOfFiles)
-  print(videosFound, "videos found in", ROOT)
+  print(countVideos(listOfFiles), "videos found in")
   for _file in listOfFiles:
     if "ship.mom" in _file:
       pathArr = _file.split("/")
@@ -41,8 +40,8 @@ def moveFolder(listOfFiles):
       print("rm -rf \"" + readyFolderPath + "\"")
       # os.system("rm -rf \"" + readyFolderPath + "\"")
 
-MOVIE_DIR = "/docks/movie"
-SHOWS_DIR = "/docks/shows"
+MOVIE_DIR = "/docks/movie/"
+SHOWS_DIR = "/docks/shows/"
 TYPES = ['mp4', 'mkv', 'avi']
 SSH = 'root@192.168.1.25'
 SCRIPTS_HOME = '/home/codabool/scripts/'
