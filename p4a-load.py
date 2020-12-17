@@ -25,11 +25,13 @@ def placeShippingFile(listOfFiles):
     if isLoaded == 'false':
       date1 = datetime.strptime(time.ctime(os.path.getctime(_file)), "%a %b %d %H:%M:%S %Y") # make ctime into datetime
       dif = (datetime.now() - date1).total_seconds() // 60 # get a deltatime -> function to seconds -> convert to minutes
-      print("Created", dif, "minutes ago")
+      print("Altered", dif, "minutes ago")
       if dif > 1:
         print("Time allotted, adding shipment label to folder ...", folderName)
         print('touch "' + _file + '/ship.mom"')
         os.system('touch \"' + _file + '/ship.win\"')
+      else:
+        print(1 - dif " left until shipment label can be made for ...", folderName)
     else:
       print('label already found in folder ...', folderName)
     print('==================\n')
