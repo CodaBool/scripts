@@ -24,6 +24,7 @@ def placeShippingFile(listOfFiles):
     print('file =', _file)
 
     isLoaded = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output('if [ -f "' + _file + '/ship.mom" ]; then echo "true"; else echo "false"; fi', shell=True)))
+    print('isLoaded =', isLoaded)
     if isLoaded == 'true':
       print('this is a mom shipment')
       alreadyLoaded = True
