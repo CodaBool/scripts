@@ -29,8 +29,6 @@ def moveFolder(listOfFiles):
     if "ship.mom" in _file:
       # variables
       pathArr = _file.split("/")
-
-      # _file[7:]
       readyFolderPath = _file[:-8]
       readyFolderName = pathArr[-2:][0]
       print(countVideos(getListOfFiles(readyFolderPath)), " videos found in this transfer to mom")
@@ -38,36 +36,27 @@ def moveFolder(listOfFiles):
       print('pathArr', pathArr)
       print('readyFolderPath', readyFolderPath)
       print('readyFolderName', readyFolderName)
-      load_dotenv()
       print('os.getenv(MOM_PASS)', os.getenv('MOM_PASS'))
-
-
-
+      
       print("\nSSH Copy of folder " + readyFolderName)
-      print("DEBUG sshpass -p " +  os.getenv('WIN_PASS') + " scp -r \"" + readyFolderPath + "\" Dougie@192.168.1.27:/Transcode/pull")
-      # os.system("sshpass -p " +  os.getenv('WIN_PASS') + " scp -r \"" + readyFolderPath + "\" Dougie@192.168.1.27:/Transcode/pull")
+      # os.system("sshpass -p " +  os.getenv('MOM_PASS') + " scp -r \"" + readyFolderPath + "\" " + SSH + ":/mnt/sd1/ven/jellyfin/new")
       print("SSH Adding im.done file")
-      print("DEBUG sshpass -p " +  os.getenv('WIN_PASS') + " scp /home/codabool/Documents/im.done Dougie@192.168.1.27:\'\"/Transcode/pull/" + readyFolderName + "\"\'")
-
-      # os.system("sshpass -p " +  os.getenv('WIN_PASS') + " scp /home/codabool/Documents/im.done Dougie@192.168.1.27:\'\"/Transcode/pull/" + readyFolderName + "\"\'")
+      # os.system("sshpass -p " +  os.getenv('MOM_PASS') + " scp " + SCRIPTS_HOME + "im.done " + SSH + ":\'\"/mnt/sd1/ven/jellyfin/new/" + readyFolderName + "\"\'")
       print("SSH Copy Complete\n\nRemoving shipment folder from docks")
       print("rm -rf \"" + readyFolderPath + "\"")
       # os.system("rm -rf \"" + readyFolderPath + "\"")
 
-    else:
-      print('no shipment label found', _file)
-
 ROOT = "/docks/"
 TYPES = ['mp4', 'mkv', 'avi']
-
+SSH = 'codabool@192.168.1.25'
+SCRIPTS_HOME = 'home/codabool/scripts/'
+load_dotenv()
 
 print('\n==================')
 if isfile(ROOT + "shipping.started"):
   print("Shipment in progress try again later.\nTo force start remove " + ROOT + "shipping.started")
 else:
-  print('made shipping.started...')
   os.system("touch " + ROOT + "shipping.started")
   moveFolder(getListOfFiles(ROOT))
-  print('...removing shipping.started')
   os.system("rm " + ROOT + "shipping.started")
 print('==================\n')
