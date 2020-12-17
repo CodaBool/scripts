@@ -20,9 +20,10 @@ def placeShippingFile(listOfFiles):
   for _file in listOfFiles:
 
     print('\n==================')
-    print('file =', _file)
+    print('searching folder ...', _file[7:]) # prints just the relative folder
+    
     isLoaded = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output('if [ -f "' + _file + '/ship.mom" ]; then echo "true"; else echo "false"; fi', shell=True)))
-    if isLoaded == 'true':
+    if isLoaded == 'false':
       date1 = datetime.strptime(time.ctime(os.path.getctime(_file)), "%a %b %d %H:%M:%S %Y") # make ctime into datetime
       dif = (datetime.now() - date1).total_seconds() // 60 # get a deltatime -> function to seconds -> convert to minutes
       print("Created", dif, "minutes ago")
