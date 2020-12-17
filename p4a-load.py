@@ -33,5 +33,8 @@ def placeShippingFile(listOfFiles):
         print("Folder altered", dif, "minutes ago. Label will be added after 1 unaltered minute")
     print('==================\n')
 
-ROOT = "/docks"
-placeShippingFile(getListOfFiles(ROOT))
+# ROOT = "/docks"
+MOVIE = "/docks/movie"
+SHOWS = "/docks/shows"
+placeShippingFile(getListOfFiles(MOVIE))
+placeShippingFile(getListOfFiles(SHOWS))
