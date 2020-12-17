@@ -1,11 +1,20 @@
 #!/bin/bash
 
-# $thingy = curl
+# ===== Working way to speak on server =====
+# IP=$(curl https://g5rkignyck.execute-api.us-east-1.amazonaws.com)
+# echo "$IP"
+# /opt/minecraft/tools/mcrcon/mcrcon -p admin "say $IP"
 
-IP=$(curl https://g5rkignyck.execute-api.us-east-1.amazonaws.com)
-echo "IP = $IP"
-# sed "s/IP/$IP/" nsupdate.txt | nsupdate
-# echo "sed =" $sed
-echo "/opt/minecraft/tools/mcrcon/mcrcon -p admin \"say $IP\""
+# get filename
+# echo -n "Enter File Name : "
+# read fileName
 
-/opt/minecraft/tools/mcrcon/mcrcon -p admin "say $IP"
+# # make sure file exits for reading
+# if [ ! -f $fileName ]; then
+#   echo "Filename $fileName does not exists"
+#   exit 1
+# fi
+
+# display last five lines of the file using tail command
+tail -5 /opt/minecraft/server/logs/latest.log
+# echo 
