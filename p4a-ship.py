@@ -45,7 +45,7 @@ def moveFolder(listOfFiles, isMovie):
         os.system("scp " + IM_DONE_FILE + " " + SSH + ":\'\"/mnt/sd1/ven/media/shows/" + readyFolderName + "\"\'")
       print("SSH Copy Complete\nRemoving shipment folder from docks")
       print("rm -rf \"" + readyFolderPath + "\"")
-      # os.system("rm -rf \"" + readyFolderPath + "\"")
+      os.system("rm -rf \"" + readyFolderPath + "\"")
 
 
 MOVIE_DIR = "/docks/movie/"
