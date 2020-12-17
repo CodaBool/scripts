@@ -17,6 +17,8 @@ def getListOfFiles(directory): # create a list of file and sub directories
 def placeShippingFile(listOfFiles):
   for _file in listOfFiles:
     print('\n==================')
+    print(_file)
+    print('DEBUG ...', _file[12:])
     print('searching folder ...', _file[7:]) # print just the relative folder
     if isfile(_file + "/ship.mom"):
       print('label already found in folder')
@@ -26,7 +28,7 @@ def placeShippingFile(listOfFiles):
       if dif > 1:
         print("Time allotted, adding shipment label to folder")
         print('touch "' + _file + '/ship.mom"')
-        os.system('touch "' + _file + '/ship.mom"')
+        # os.system('touch "' + _file + '/ship.mom"')
       else:
         print("Folder altered", dif, "minutes ago. Label will be added after 1 unaltered minute")
     print('==================\n')
