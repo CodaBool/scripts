@@ -23,32 +23,29 @@ def countVideos(listOfFiles):
   return totalVideos
 
 def moveFolder(listOfFiles, isMovie):
-  print(countVideos(listOfFiles), "videos found")
+  print(countVideos(listOfFiles), "videos found\n")
   for _file in listOfFiles:
     if "ship.mom" in _file:
       pathArr = _file.split("/")
       readyFolderPath = _file[:-8]
       readyFolderName = pathArr[-2:][0]
       
-      print("\nSSH Copy of folder " + readyFolderName)
+      print("SSH Copy of ...", readyFolderName)
       if isMovie == True:
-        print("DEBUG " + "scp -r \"" + readyFolderPath + "\" " + SSH + ":/mnt/sd1/ven/media/movies")
+        # print("DEBUG " + "scp -r \"" + readyFolderPath + "\" " + SSH + ":/mnt/sd1/ven/media/movies")
         os.system("scp -r \"" + readyFolderPath + "\" " + SSH + ":/mnt/sd1/ven/media/movies")
         print("SSH Adding im.done file")
-        print("DEBUG " + "scp " + IM_DONE_FILE + " " + SSH + ":\'\"/mnt/sd1/ven/media/movies/" + readyFolderName + "\"\'")
+        # print("DEBUG " + "scp " + IM_DONE_FILE + " " + SSH + ":\'\"/mnt/sd1/ven/media/movies/" + readyFolderName + "\"\'")
         os.system("scp " + IM_DONE_FILE + " " + SSH + ":\'\"/mnt/sd1/ven/media/movies/" + readyFolderName + "\"\'")
-        print("SSH Copy Complete\n\nRemoving shipment folder from docks")
-        print("rm -rf \"" + readyFolderPath + "\"")
-        # os.system("rm -rf \"" + readyFolderPath + "\"")
       else:
-        print("DEBUG " + "scp -r \"" + readyFolderPath + "\" " + SSH + ":/mnt/sd1/ven/media/shows")
+        # print("DEBUG " + "scp -r \"" + readyFolderPath + "\" " + SSH + ":/mnt/sd1/ven/media/shows")
         os.system("scp -r \"" + readyFolderPath + "\" " + SSH + ":/mnt/sd1/ven/media/shows")
         print("SSH Adding im.done file")
-        print("DEBUG " + "scp " + IM_DONE_FILE + " " + SSH + ":\'\"/mnt/sd1/ven/media/shows/" + readyFolderName + "\"\'")
+        # print("DEBUG " + "scp " + IM_DONE_FILE + " " + SSH + ":\'\"/mnt/sd1/ven/media/shows/" + readyFolderName + "\"\'")
         os.system("scp " + IM_DONE_FILE + " " + SSH + ":\'\"/mnt/sd1/ven/media/shows/" + readyFolderName + "\"\'")
-        print("SSH Copy Complete\n\nRemoving shipment folder from docks")
-        print("rm -rf \"" + readyFolderPath + "\"")
-        # os.system("rm -rf \"" + readyFolderPath + "\"")
+      print("SSH Copy Complete\nRemoving shipment folder from docks")
+      print("rm -rf \"" + readyFolderPath + "\"")
+      # os.system("rm -rf \"" + readyFolderPath + "\"")
 
 
 MOVIE_DIR = "/docks/movie/"
