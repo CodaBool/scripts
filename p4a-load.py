@@ -3,7 +3,7 @@ import re
 import subprocess
 import os.path, time
 from datetime import datetime
-from os.path import join, isdir
+from os.path import join, isdir, isfile
 
 def getListOfFiles(directory): # create a list of file and sub directories
   listOfFile = os.listdir(directory) # names in the given directory
@@ -21,6 +21,10 @@ def placeShippingFile(listOfFiles):
     print('\n==================')
     print('searching folder ...', _file[7:]) # print just the relative folder
     isLoaded = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output('if [ -f "' + _file + '/ship.mom" ]; then echo "true"; else echo "false"; fi', shell=True)))
+    if isfile(_file + "/ship.mom"):
+      print('better method true')
+    else:
+      print('better method false')
     if isLoaded == 'false':
       date1 = datetime.strptime(time.ctime(os.path.getctime(_file)), "%a %b %d %H:%M:%S %Y") # make ctime into datetime
       dif = (datetime.now() - date1).total_seconds() // 60 # get a deltatime -> function to seconds -> convert to minutes
@@ -34,6 +38,5 @@ def placeShippingFile(listOfFiles):
       print('label already found in folder')
     print('==================\n')
 
-re.sub('b|\'|n|\\\\', '', str(subprocess.check_output('touch /docks/I-RAN', shell=True))) # DEBUG
 ROOT = "/docks"
 placeShippingFile(getListOfFiles(ROOT))
