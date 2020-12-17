@@ -39,7 +39,7 @@ def moveFolder(listOfFiles):
       print('readyFolderPath', readyFolderPath)
       print('readyFolderName', readyFolderName)
       load_dotenv()
-      print('os.getenv(MOM_PASS)', os.getenv(MOM_PASS))
+      print('os.getenv(MOM_PASS)', os.getenv('MOM_PASS'))
 
 
 
