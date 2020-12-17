@@ -32,7 +32,7 @@ def moveFolder(listOfFiles):
       pathArr = _file.split("/")
       readyFolderPath = _file[:-8]
       readyFolderName = pathArr[-2:][0]
-      print("transfering " + videosFound + " videos to mom")
+      print("transfering ", videosFound, " videos to mom")
       print('pathArr', pathArr)
       print('readyFolderPath', readyFolderPath)
       print('readyFolderName', readyFolderName)
