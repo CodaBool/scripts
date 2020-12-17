@@ -1,3 +1,3 @@
-from pathlib import Path
-s = path('/opt/minecraft/server/logs/latest.log').bytes()
-print('s', s)
+path = "/opt/minecraft/server/logs/latest.log"
+names_file = open(path, 'r')
+print('output =', names_file.read())
