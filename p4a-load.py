@@ -31,7 +31,7 @@ def placeShippingFile(listOfFiles):
         print('touch "' + _file + '/ship.mom"')
         os.system('touch \"' + _file + '/ship.win\"')
     else:
-      print('already loaded')
+      print('label already found in folder ...', folderName)
     print('==================\n')
     
 ROOT = "/docks"
