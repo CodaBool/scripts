@@ -33,19 +33,19 @@ def moveFolder(listOfFiles, isMovie):
       print("\nSSH Copy of folder " + readyFolderName)
       if isMovie == True:
         print("DEBUG " + "scp -r \"" + readyFolderPath + "\" " + SSH + ":/mnt/sd1/ven/media/movies")
-        # os.system("scp -r \"" + readyFolderPath + "\" " + SSH + ":/mnt/sd1/ven/media/movies")
+        os.system("scp -r \"" + readyFolderPath + "\" " + SSH + ":/mnt/sd1/ven/media/movies")
         print("SSH Adding im.done file")
-        print("DEBUG " + "scp " + SCRIPTS_HOME + "im.done " + SSH + ":\'\"/mnt/sd1/ven/media/movies/" + readyFolderName + "\"\'")
-        # os.system("scp " + SCRIPTS_HOME + "im.done " + SSH + ":\'\"/mnt/sd1/ven/media/movies/" + readyFolderName + "\"\'")
+        print("DEBUG " + "scp " + IM_DONE_FILE + " " + SSH + ":\'\"/mnt/sd1/ven/media/movies/" + readyFolderName + "\"\'")
+        os.system("scp " + IM_DONE_FILE + " " + SSH + ":\'\"/mnt/sd1/ven/media/movies/" + readyFolderName + "\"\'")
         print("SSH Copy Complete\n\nRemoving shipment folder from docks")
         print("rm -rf \"" + readyFolderPath + "\"")
         # os.system("rm -rf \"" + readyFolderPath + "\"")
       else:
         print("DEBUG " + "scp -r \"" + readyFolderPath + "\" " + SSH + ":/mnt/sd1/ven/media/shows")
-        # os.system("scp -r \"" + readyFolderPath + "\" " + SSH + ":/mnt/sd1/ven/media/shows")
+        os.system("scp -r \"" + readyFolderPath + "\" " + SSH + ":/mnt/sd1/ven/media/shows")
         print("SSH Adding im.done file")
-        print("DEBUG " + "scp " + SCRIPTS_HOME + "im.done " + SSH + ":\'\"/mnt/sd1/ven/media/shows/" + readyFolderName + "\"\'")
-        # os.system("scp " + SCRIPTS_HOME + "im.done " + SSH + ":\'\"/mnt/sd1/ven/media/shows/" + readyFolderName + "\"\'")
+        print("DEBUG " + "scp " + IM_DONE_FILE + " " + SSH + ":\'\"/mnt/sd1/ven/media/shows/" + readyFolderName + "\"\'")
+        os.system("scp " + IM_DONE_FILE + " " + SSH + ":\'\"/mnt/sd1/ven/media/shows/" + readyFolderName + "\"\'")
         print("SSH Copy Complete\n\nRemoving shipment folder from docks")
         print("rm -rf \"" + readyFolderPath + "\"")
         # os.system("rm -rf \"" + readyFolderPath + "\"")
@@ -55,7 +55,7 @@ MOVIE_DIR = "/docks/movie/"
 SHOWS_DIR = "/docks/shows/"
 TYPES = ['mp4', 'mkv', 'avi']
 SSH = 'root@192.168.1.25'
-SCRIPTS_HOME = '/home/codabool/scripts/'
+IM_DONE_FILE = '/home/codabool/scripts/im.done'
 
 print('\n==================')
 moveMovie = sys.argv[1]
