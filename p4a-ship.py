@@ -60,16 +60,16 @@ if isfile(ROOT + "shipping.started"):
   print("Shipment in progress try again later.\nTo force start remove " + ROOT + "shipping.started")
 else:
   try:
-    moveMovie = sys.argv[1]
+    moveMovie = sys.argv[1] # throws error if no arguments in cli
+    os.system("touch " + ROOT + "shipping.started")
+    moveFolder(getListOfFiles(ROOT))
+    os.system("rm " + ROOT + "shipping.started")
+    if moveMovie == 'true':
+      print('checking for movies')
+      moveFolder(getListOfFiles(MOVIE_DIR), True)
+    else:
+      print('checking for shows')
+      moveFolder(getListOfFiles(SHOWS_DIR), False)
   except:
     print("Please provide if you want to ship from the movie or show directory\n(true for movies, false for shows)\npython3 ~/scripts/p4a-ship.py true") 
-  if moveMovie == 'true':
-    print('checking for movies')
-    moveFolder(getListOfFiles(MOVIE_DIR), True)
-  else:
-    print('checking for shows')
-    moveFolder(getListOfFiles(SHOWS_DIR), False)
-  os.system("touch " + ROOT + "shipping.started")
-  moveFolder(getListOfFiles(ROOT))
-  os.system("rm " + ROOT + "shipping.started")
 print('==================\n')
