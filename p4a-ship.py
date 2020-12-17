@@ -68,7 +68,8 @@ else:
     else:
       print('checking for shows')
       moveFolder(getListOfFiles(SHOWS_DIR), False)
+    os.system("rm " + ROOT + "shipping.started")
   except:
     os.system("rm " + ROOT + "shipping.started")
-    print("\nError occured.\nPlease provide if you want to ship from the movie or show directory\n(true for movies, false for shows)\npython3 ~/scripts/p4a-ship.py true") 
+    print("\nUnknown Error\nPlease provide if you want to ship from the movie or show directory\n(true for movies, false for shows)\npython3 ~/scripts/p4a-ship.py true") 
 print('==================\n')
