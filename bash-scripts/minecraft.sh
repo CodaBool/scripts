@@ -16,5 +16,5 @@
 # fi
 
 # display last five lines of the file using tail command
-tail -5 /opt/minecraft/server/logs/latest.log
-# echo 
+OUT=$(tail -5 /opt/minecraft/server/logs/latest.log)
+echo "output =" $OUT
