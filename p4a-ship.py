@@ -71,5 +71,10 @@ else:
     os.system("rm " + ROOT + "shipping.started") # remove shipment file to allow future shipments
   except:
     # os.system("rm " + ROOT + "shipping.started") # remove shipment file
-    print("\nUnknown Error\nPlease provide if you want to ship from the movie or show directory\n(true for movies, false for shows)\npython3 ~/scripts/p4a-ship.py true") 
+    print("""======= Unknown Error =======
+    For proper syntax provide where to ship to, movie or show directory
+    Example
+    python3 ~/scripts/p4a-ship.py true
+    (true for movies, false for shows)
+    """) 
 print('==================\n')
