@@ -18,24 +18,20 @@ def getListOfFiles(directory): # create a list of file and sub directories
 
 def placeShippingFile(listOfFiles):
   for _file in listOfFiles:
-    alreadyLoaded = False
 
     print('\n==================')
     print('file =', _file)
-
     isLoaded = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output('if [ -f "' + _file + '/ship.mom" ]; then echo "true"; else echo "false"; fi', shell=True)))
-    print('isLoaded =', isLoaded)
     if isLoaded == 'true':
-      print('this is a mom shipment')
-      alreadyLoaded = True
-
-    date1 = datetime.strptime(time.ctime(os.path.getctime(_file)), "%a %b %d %H:%M:%S %Y") # make ctime into datetime
-    dif = (datetime.now() - date1).total_seconds() // 60 # get a deltatime -> function to seconds -> convert to minutes
-    print("Created", dif, "minutes ago")
-    if dif > 1 and not alreadyLoaded:
-      print("Time allotted, preping folder for shipping", _file)
-      print('touch \'' + _file + '/ship.' + SHIPMENT_DESTINATION + '\'')
-      # os.system('touch \"' + _file + '/ship.win\"')
+      date1 = datetime.strptime(time.ctime(os.path.getctime(_file)), "%a %b %d %H:%M:%S %Y") # make ctime into datetime
+      dif = (datetime.now() - date1).total_seconds() // 60 # get a deltatime -> function to seconds -> convert to minutes
+      print("Created", dif, "minutes ago")
+      if dif > 1 and not alreadyLoaded:
+        print("Time allotted, preping folder for shipping", _file)
+        print('touch \'' + _file + '/ship.' + SHIPMENT_DESTINATION + '\'')
+        # os.system('touch \"' + _file + '/ship.win\"')
+    else:
+      print('already loaded')
     print('==================\n')
     
 
