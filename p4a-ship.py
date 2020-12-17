@@ -38,6 +38,7 @@ def moveFolder(listOfFiles):
       print('pathArr', pathArr)
       print('readyFolderPath', readyFolderPath)
       print('readyFolderName', readyFolderName)
+      load_dotenv()
       print('os.getenv(MOM_PASS)', os.getenv(MOM_PASS))
 
 
@@ -58,7 +59,7 @@ def moveFolder(listOfFiles):
 
 ROOT = "/docks/"
 TYPES = ['mp4', 'mkv', 'avi']
-load_dotenv()
+
 
 print('\n==================')
 if isfile(ROOT + "shipping.started"):
