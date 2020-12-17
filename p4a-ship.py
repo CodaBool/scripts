@@ -50,24 +50,26 @@ def moveFolder(listOfFiles, isMovie):
 
 MOVIE_DIR = "/docks/movie/"
 SHOWS_DIR = "/docks/shows/"
+ROOT = '/docks/'
 TYPES = ['mp4', 'mkv', 'avi']
 SSH = 'root@192.168.1.25'
 IM_DONE_FILE = '/home/codabool/scripts/im.done'
 
 print('\n==================')
-moveMovie = sys.argv[1]
-if moveMovie == 'true':
-  print('checking for movies')
-  moveFolder(getListOfFiles(MOVIE_DIR), True)
+if isfile(ROOT + "shipping.started"):
+  print("Shipment in progress try again later.\nTo force start remove " + ROOT + "shipping.started")
 else:
-  print('checking for shows')
-  moveFolder(getListOfFiles(SHOWS_DIR), False)
-
-
-# if isfile(ROOT + "shipping.started"):
-#   print("Shipment in progress try again later.\nTo force start remove " + ROOT + "shipping.started")
-# else:
-#   os.system("touch " + ROOT + "shipping.started")
-#   moveFolder(getListOfFiles(ROOT))
-#   os.system("rm " + ROOT + "shipping.started")
+  try:
+    moveMovie = sys.argv[1]
+  except:
+    print("Please provide if you want to ship from the movie or show directory\n(true for movies, false for shows)\npython3 ~/scripts/p4a-ship.py true") 
+  if moveMovie == 'true':
+    print('checking for movies')
+    moveFolder(getListOfFiles(MOVIE_DIR), True)
+  else:
+    print('checking for shows')
+    moveFolder(getListOfFiles(SHOWS_DIR), False)
+  os.system("touch " + ROOT + "shipping.started")
+  moveFolder(getListOfFiles(ROOT))
+  os.system("rm " + ROOT + "shipping.started")
 print('==================\n')
