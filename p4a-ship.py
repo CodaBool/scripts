@@ -41,13 +41,19 @@ def moveFolder(listOfFiles):
       print("rm -rf \"" + readyFolderPath + "\"")
       # os.system("rm -rf \"" + readyFolderPath + "\"")
 
-ROOT = "/docks/"
+MOVIE_DIR = "/docks/movie"
+SHOWS_DIR = "/docks/shows"
 TYPES = ['mp4', 'mkv', 'avi']
 SSH = 'root@192.168.1.25'
 SCRIPTS_HOME = '/home/codabool/scripts/'
 
 print('\n==================')
-moveFolder(getListOfFiles(ROOT))
+moveMovie = sys.argv[1]
+if moveMovie == 'true':
+  moveFolder(getListOfFiles(MOVIE_DIR))
+else:
+  moveFolder(getListOfFiles(SHOWS_DIR))
+
 
 # if isfile(ROOT + "shipping.started"):
 #   print("Shipment in progress try again later.\nTo force start remove " + ROOT + "shipping.started")
