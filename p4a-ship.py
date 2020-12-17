@@ -44,7 +44,7 @@ def moveFolder(listOfFiles):
 ROOT = "/docks/"
 TYPES = ['mp4', 'mkv', 'avi']
 SSH = 'root@192.168.1.25'
-SCRIPTS_HOME = 'home/codabool/scripts/'
+SCRIPTS_HOME = '/home/codabool/scripts/'
 
 print('\n==================')
 moveFolder(getListOfFiles(ROOT))
