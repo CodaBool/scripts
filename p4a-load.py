@@ -18,7 +18,7 @@ def placeShippingFile(listOfFiles):
   for _file in listOfFiles:
     print('\n==================')
     print(_file)
-    print('DEBUG ...', _file[12:])
+    print('DEBUG ...', _file[13:])
     print('searching folder ...', _file[7:]) # print just the relative folder
     if isfile(_file + "/ship.mom"):
       print('label already found in folder')
@@ -34,7 +34,7 @@ def placeShippingFile(listOfFiles):
     print('==================\n')
 
 # ROOT = "/docks"
-MOVIE = "/docks/movie"
-SHOWS = "/docks/shows"
+MOVIE = "/docks/movie/"
+SHOWS = "/docks/shows/"
 placeShippingFile(getListOfFiles(MOVIE))
 placeShippingFile(getListOfFiles(SHOWS))
