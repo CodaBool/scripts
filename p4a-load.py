@@ -33,6 +33,7 @@ def placeShippingFile(listOfFiles):
     else:
       print('label already found in folder')
     print('==================\n')
-    
+
+re.sub('b|\'|n|\\\\', '', str(subprocess.check_output('touch /docks/I-RAN', shell=True))) # DEBUG
 ROOT = "/docks"
 placeShippingFile(getListOfFiles(ROOT))
