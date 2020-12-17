@@ -31,7 +31,7 @@ def placeShippingFile(listOfFiles):
         print('touch "' + _file + '/ship.mom"')
         os.system('touch \"' + _file + '/ship.win\"')
       else:
-        print(1 - dif " left until shipment label can be made for ...", folderName)
+        print(1 - dif, "left until shipment label can be made for ...", folderName)
     else:
       print('label already found in folder ...', folderName)
     print('==================\n')
