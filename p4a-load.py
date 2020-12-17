@@ -1,6 +1,4 @@
 import os
-import re
-import subprocess
 import os.path, time
 from datetime import datetime
 from os.path import join, isdir, isfile
@@ -20,12 +18,9 @@ def placeShippingFile(listOfFiles):
   for _file in listOfFiles:
     print('\n==================')
     print('searching folder ...', _file[7:]) # print just the relative folder
-    isLoaded = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output('if [ -f "' + _file + '/ship.mom" ]; then echo "true"; else echo "false"; fi', shell=True)))
     if isfile(_file + "/ship.mom"):
-      print('better method true')
+      print('label already found in folder')
     else:
-      print('better method false')
-    if isLoaded == 'false':
       date1 = datetime.strptime(time.ctime(os.path.getctime(_file)), "%a %b %d %H:%M:%S %Y") # make ctime into datetime
       dif = (datetime.now() - date1).total_seconds() // 60 # get a deltatime -> function to seconds -> convert to minutes
       if dif > 1:
@@ -34,8 +29,6 @@ def placeShippingFile(listOfFiles):
         os.system('touch "' + _file + '/ship.mom"')
       else:
         print("Folder altered", dif, "minutes ago. Label will be added after 1 unaltered minute")
-    else:
-      print('label already found in folder')
     print('==================\n')
 
 ROOT = "/docks"
