@@ -28,7 +28,7 @@ def placeShippingFile(listOfFiles):
       if dif > 1:
         print("Time allotted, adding shipment label to folder")
         print('touch "' + _file + '/ship.mom"')
-        os.system('touch "' + _file + '/ship.mom"')
+        # os.system('touch "' + _file + '/ship.mom"')
       else:
         print("Folder altered", dif, "minutes ago. Label will be added after 1 unaltered minute")
     print('==================\n')
