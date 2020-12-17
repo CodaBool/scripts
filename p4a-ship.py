@@ -39,8 +39,10 @@ def moveFolder(listOfFiles):
       print('os.getenv(MOM_PASS)', os.getenv('MOM_PASS'))
       
       print("\nSSH Copy of folder " + readyFolderName)
+      print("DEBUG " + "sshpass -p " +  os.getenv('MOM_PASS') + " scp -r \"" + readyFolderPath + "\" " + SSH + ":/mnt/sd1/ven/jellyfin/new")
       # os.system("sshpass -p " +  os.getenv('MOM_PASS') + " scp -r \"" + readyFolderPath + "\" " + SSH + ":/mnt/sd1/ven/jellyfin/new")
       print("SSH Adding im.done file")
+      print("DEBUG " + "sshpass -p " +  os.getenv('MOM_PASS') + " scp " + SCRIPTS_HOME + "im.done " + SSH + ":\'\"/mnt/sd1/ven/jellyfin/new/" + readyFolderName + "\"\'")
       # os.system("sshpass -p " +  os.getenv('MOM_PASS') + " scp " + SCRIPTS_HOME + "im.done " + SSH + ":\'\"/mnt/sd1/ven/jellyfin/new/" + readyFolderName + "\"\'")
       print("SSH Copy Complete\n\nRemoving shipment folder from docks")
       print("rm -rf \"" + readyFolderPath + "\"")
