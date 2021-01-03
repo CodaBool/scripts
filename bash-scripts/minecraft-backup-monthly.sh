@@ -1,9 +1,9 @@
 #!/bin/bash
 # ran using crontab every Month at 6am first day
 # MONTH = full text of the current month
-MONTH=$(LC_ALL=C date +%B)
+SOMETHING=$(LC_ALL=C date +%B + %Y)
 YEAR=date +"%Y"
-echo $MONTH
+echo $SOMETHING
 echo $YEAR
 # rm -rf /opt/minecraft/backups/world-$MONTH
 # cp -r /opt/minecraft/server/world /opt/minecraft/backups/world-$MONTH
