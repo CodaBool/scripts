@@ -6,4 +6,4 @@ DOW=$(date +%u)
 rm -rf /opt/minecraft/backups/world-$DOW
 # mv /opt/minecraft/backups/current-world /opt/minecraft/backups/old-world
 cp -r /opt/minecraft/server/world /opt/minecraft/backups/world-$DOW
-/opt/minecraft/tools/mcrcon/mcrcon -p admin "say making a daily backup of the world -Doggie"
+/opt/minecraft/tools/mcrcon/mcrcon -p admin "say Making a daily backup of the world -Doggie Corp."
