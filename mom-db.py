@@ -6,23 +6,22 @@ import subprocess
 from dotenv import load_dotenv
 from datetime import datetime
 
-def getSpace():
+def getInternalSpace():
   total, used, free = shutil.disk_usage(__file__)
   percent = free / total * 100
+  # print('internal storage ---> ', int(percent))
   return int(percent)
 
 def getExternalSpace():
-  newout = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output("df /dev/sda1", shell=True)))
+  newout = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output("sudo df /dev/sda1", shell=True)))
+  # print('external storage ---> ', (100 - int(newout.split()[10][:-1])))
   return 100 - int(newout.split()[10][:-1])
 
 def executeQuery(cursor, connection):
-  # new = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output("python3 ~/scripts/count-simple.py /mnt/sd1/ven/jellyfin/new n", shell=True)))
-  space = getSpace() # this is not as useful as external drive space, could use this if I add new column for it in db
-  new = 3
-  # externalSpace = getExternalSpace()
-  lastRan = datetime.now()
-  print(f'UPDATE pi8 SET "Space Left"={space}, "New Videos"={new}, "Last Ran"=\'{lastRan}\' WHERE id=1;')
-  # cursor.execute(f'UPDATE pi8 SET "Space Left"={space}, "New Videos"={new}, "Last Ran"=\'{lastRan}\' WHERE id=1;') # syntax requires > python 3.6
+  videos = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output("python3 /home/codabool/scripts/count-simple.py /mnt/sd1/ven/media/ n", shell=True))) # requires sudo for drive
+  # print('Videos on Drive ---> ', videos)
+  # print(f'UPDATE mom SET "Space Left Internal"={getInternalSpace()}, "Space Left External"={getExternalSpace()}, "Videos"={videos}, "Last Ran"=CURRENT_TIMESTAMP;')
+  cursor.execute(f'UPDATE mom SET "Space Left Internal"={getInternalSpace()}, "Space Left External"={getExternalSpace()}, "Videos"={videos}, "Last Ran"=CURRENT_TIMESTAMP;') # syntax requires > python 3.6 
 
 try:
   load_dotenv()

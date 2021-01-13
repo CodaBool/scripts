@@ -30,47 +30,28 @@ ________________________________________________________________________________
 # Database
 #### create tables
 CREATE TABLE p4a (
-  id              serial,
-  "Space Left"    real,
-  "Completed"       integer,
-  "Downloading"     integer,
-  "Total"           integer,
-  "Last Ran"         timestamp,
-  "Transferring"    integer,
-  "Device"         varchar(255)
+  "Space Left"      text,
+  "Completed"       text,
+  "Downloading"     text,
+  "Transferring"    text,
+  "VPN Status"      text,
+  "Last Ran"        timestamp
 );
-
 CREATE TABLE p8a (
-  id              serial,
-  "Space Left"    real,
-  "New Videos"       integer,
-  "Last Ran"         timestamp,
-  "Device"         varchar(255)
+  "Space Left"       text,
+  "Last Ran"         timestamp
 );
-
-CREATE TABLE win (
-  id              serial,
-  "Transcoding"       integer,
-  "Transferring"     integer,
-  "Waiting"           integer,
-  "Last Ran"         timestamp,
-  "Device"         varchar(255)
-);
-
 CREATE TABLE mom (
-  id              serial,
-  "Transcoding"       integer,
-  "Ready"           integer,
-  "Status"         varchar(255),
-  "Last Ran"         timestamp,
-  "Device"         varchar(255)
+  "Space Left Internal"    text,
+  "Space Left External"    text,
+  "Videos"                 text,
+  "Last Ran"               timestamp
 );
 
 #### add dummy row to initialize
-INSERT INTO p4a ("Device") VALUES ('Pi 4 a');
-INSERT INTO p8a ("Device") VALUES ('Pi 8 a');
-INSERT INTO win ("Device") VALUES ('Windows');
-INSERT INTO mom ("Device") VALUES ('Server');
+INSERT INTO p4a ("Space Left", "Completed", "Downloading", "Transferring", "VPN Status", "Last Ran") VALUES ('5', '5', '5', '5', '5', CURRENT_TIMESTAMP);
+INSERT INTO p8a ("Space Left", "Last Ran") VALUES ('5', CURRENT_TIMESTAMP);
+INSERT INTO mom ("Space Left Internal", "Space Left External", "Videos", "Last Ran") VALUES ('5', '5', '5', CURRENT_TIMESTAMP);
 
 #### update in code
 UPDATE p4a SET "Space Left"={space}, "Completed"={completed}, "Downloading"={downloading}, "Total"={total}, "Last Ran"=\'{lastRan}\', "Transferring"={transferring} WHERE id=1;
@@ -79,7 +60,7 @@ UPDATE win SET "Transcoding"={transcoding}, "Transferring"={transferring}, "Wait
 
 #### drop tables
 drop table p4a;
-drop table pi8;
+drop table p8a;
 drop table win;
 drop table mom;
 
