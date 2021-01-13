@@ -1,4 +1,4 @@
 #!/bin/bash
 wholePercent=$(heroku ps -a codabool-nextjs-home | grep 'this month' | grep -o -P "(?<=\().*(?=\))")
 justInt=${wholePercent::-1}
-echo "just int = $justInt"
+echo $justInt
