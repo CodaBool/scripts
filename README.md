@@ -35,6 +35,7 @@ CREATE TABLE p4a (
   "Downloading"     text,
   "Transferring"    text,
   "VPN Status"      text,
+  "QBit Status"     text,
   "Last Ran"        timestamp
 );
 CREATE TABLE p8a (
@@ -49,12 +50,12 @@ CREATE TABLE mom (
 );
 
 #### add dummy row to initialize
-INSERT INTO p4a ("Space Left", "Completed", "Downloading", "Transferring", "VPN Status", "Last Ran") VALUES ('5', '5', '5', '5', '5', CURRENT_TIMESTAMP);
+INSERT INTO p4a ("Space Left", "Completed", "Downloading", "Transferring", "VPN Status", "QBit Status", "Last Ran") VALUES ('5', '5', '5', '5', '5', '5', CURRENT_TIMESTAMP);
 INSERT INTO p8a ("Space Left", "Last Ran") VALUES ('5', CURRENT_TIMESTAMP);
 INSERT INTO mom ("Space Left Internal", "Space Left External", "Videos", "Last Ran") VALUES ('5', '5', '5', CURRENT_TIMESTAMP);
 
 #### update in code
-UPDATE p4a SET "Space Left"={space}, "Completed"={completed}, "Downloading"={downloading}, "Total"={total}, "Last Ran"=\'{lastRan}\', "Transferring"={transferring} WHERE id=1;
+UPDATE p4a SET "Space Left"={space}, Completed"={complete}, "Downloading"={download}, "Transferring"={ready}, "VPN Status"={status}, "Last Ran"=CURRENT_TIMESTAMP;
 UPDATE pi8 SET "Space Left"={space}, "New Videos"={new}, "Last Ran"=\'{lastRan}\'  WHERE id=1;
 UPDATE win SET "Transcoding"={transcoding}, "Transferring"={transferring}, "Waiting"={waiting}, "Last Ran"=\'{lastRan}\' WHERE id=1;
 

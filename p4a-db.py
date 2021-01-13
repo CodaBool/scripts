@@ -11,19 +11,26 @@ def getSpace():
   percent = free / total * 100
   return int(percent)
 
+def getStatus():
+  raw = subprocess.check_output(['protonvpn', 'status'])
+  return raw.split()[1].decode('UTF-8')
+
+def getQbitStatus():
+  raw = subprocess.check_output(['systemctl', 'is-active', 'qbittorrent'])
+  return raw.decode('UTF-8').strip()
+
 def executeQuery(cursor, connection):  
-  total = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output("/home/codabool/tor/qbt/qbt torrent list -F list | grep -o Hash | wc -l", shell=True)))
-  completed = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output("/home/codabool/tor/qbt/qbt torrent list -F list -f completed | grep -o Hash | wc -l", shell=True)))
+  completed = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output("python3 /home/codabool/scripts/count-simple.py /home/codabool/qbit/complete n", shell=True)))
   downloading = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output("/home/codabool/tor/qbt/qbt torrent list -F list -f downloading | grep -o Hash | wc -l", shell=True)))
-  transferring = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output("python3 /home/codabool/scripts/count-simple.py /docks False", shell=True)))
+  transferring = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output("python3 /home/codabool/scripts/count-simple.py /docks n", shell=True)))
+  status = getStatus()
+  qbit = getQbitStatus()
   space = getSpace()
-  lastRan = datetime.now()
-  # print(f'UPDATE p4a SET "Space Left"={space}, "Completed"={completed}, "Downloading"={downloading}, "Total"={total}, "Last Ran"=\'{lastRan}\', "Transferring"={transferring} WHERE id=1;')
-  cursor.execute(f'UPDATE p4a SET "Space Left"={space}, "Completed"={completed}, "Downloading"={downloading}, "Total"={total}, "Last Ran"=\'{lastRan}\', "Transferring"={transferring} WHERE id=1;') # syntax requires > python 3.6 
+  # print(f'UPDATE p4a SET "Space Left"={space}, "Completed"={completed}, "Downloading"={downloading}, "Transferring"={transferring}, "VPN Status"=\'{status}\', "QBit Status"=\'{qbit}\', "Last Ran"=CURRENT_TIMESTAMP;')
+  cursor.execute(f'UPDATE p4a SET "Space Left"={space}, "Completed"={completed}, "Downloading"={downloading}, "Transferring"={transferring}, "VPN Status"=\'{status}\', "QBit Status"=\'{qbit}\', "Last Ran"=CURRENT_TIMESTAMP;') # syntax requires > python 3.6 
 
 try:
   load_dotenv()
-  # print(os.getenv('URI'))
   connection = psycopg2.connect(os.getenv('URI'))
   cursor = connection.cursor()
   executeQuery(cursor, connection)
