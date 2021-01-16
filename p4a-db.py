@@ -12,25 +12,32 @@ def getSpace():
   percent = free / total * 100
   return int(percent)
 
-def readStatus():
-    file = open('/home/codabool/scripts/bash-scripts/status.txt', 'r')
-    content = file.read() 
-    status = content.split()[1]
-    qbit = content.split()[-1]
-    return [status, qbit]
+def getQbit():
+  out = subprocess.Popen(['systemctl', 'is-active', 'qbittorrent'], 
+    stdout=subprocess.PIPE, 
+    stderr=subprocess.STDOUT)
+  stdout, stderr = out.communicate()
+  return stdout.decode('utf-8').rstrip()
 
+def getVPN():
+  raw = subprocess.check_output('curl ifconfig.me', shell=True)
+  if (raw.decode('utf-8').find('67.8.111.220') == 0):
+    return 'inactive'
+  else:
+    return 'active'
+    
 def executeQuery(cursor, connection):  
   completed = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output("python3 /home/codabool/scripts/count-simple.py /home/codabool/qbit/complete n", shell=True)))
   downloading = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output("/home/codabool/tor/qbt/qbt torrent list -F list -f downloading | grep -o Hash | wc -l", shell=True)))
   transferring = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output("python3 /home/codabool/scripts/count-simple.py /docks n", shell=True)))
   space = getSpace()
-  [status, qbit] = readStatus()
+  qbit = getQbit()
+  vpn = getVPN()
   # os.system('touch /home/codabool/db-s.{space}-c.{completed}-d.{downloading}-t{transferring}-s{getStatus()}-q{getQbitStatus()}')
-  print(f'UPDATE p4a SET "Space Left"={space}, "Completed"={completed}, "Downloading"={downloading}, "Transferring"={transferring}, "VPN Status"=\'{status}\', "QBit Status"=\'{qbit}\', "Last Ran"=CURRENT_TIMESTAMP;')
-  cursor.execute(f'UPDATE p4a SET "Space Left"={space}, "Completed"={completed}, "Downloading"={downloading}, "Transferring"={transferring}, "VPN Status"=\'{status}\', "QBit Status"=\'{qbit}\', "Last Ran"=CURRENT_TIMESTAMP;') # syntax requires > python 3.6 
+  # print(f'UPDATE p4a SET "Space Left"={space}, "Completed"={completed}, "Downloading"={downloading}, "Transferring"={transferring}, "VPN Status"=\'{vpn}\', "QBit Status"=\'{qbit}\', "Last Ran"=CURRENT_TIMESTAMP;')
+  cursor.execute(f'UPDATE p4a SET "Space Left"={space}, "Completed"={completed}, "Downloading"={downloading}, "Transferring"={transferring}, "VPN Status"=\'{vpn}\', "QBit Status"=\'{qbit}\', "Last Ran"=CURRENT_TIMESTAMP;') # syntax requires > python 3.6 
 
 try:
-  time.sleep(10) # sleep for ten seconds to allow crontab to generate status.txt file
   load_dotenv()
   connection = psycopg2.connect(os.getenv('URI'))
   cursor = connection.cursor()
@@ -42,5 +49,4 @@ finally:
   if (connection):
     cursor.close()
     connection.close()
-    os.system('touch /home/codabool/db-close')
     print("PostgreSQL connection is closed")
