@@ -24,14 +24,14 @@ def findShipment(listOfFiles):
 
 try:
   load_dotenv()
-  folder = findShipment(getListOfFiles('/Transcode/pull/'))
+  folder = findShipment(getListOfFiles('/docks/'))
 
   # Ship folder
   print('cmd /c pscp -P 22 -pw ' + os.getenv('MOM_PASS') + ' -r \"' + folder + '\" codabool@192.168.1.25:/docks')
   os.system('cmd /c pscp -P 22 -pw ' + os.getenv('MOM_PASS') + ' -r \"' + folder + '\" codabool@192.168.1.25:/docks')
   
   # Delete folder
-  print('DELETE: rmdir /Q /S \"' + '\\Transcode' + '\\push\"')
+  # print('DELETE: rmdir /Q /S \"' + '\\Transcode' + '\\push\"')
   # os.system('cmd /c rmdir /Q /S \"' + ROOT + '\\push\"')
 except subprocess.CalledProcessError:
   print ('error catch, cannot perform scp')
