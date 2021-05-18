@@ -1,8 +1,25 @@
 import os
+import re
+import subprocess
 import psycopg2
 from pymongo import MongoClient
 from dotenv import load_dotenv
 from datetime import datetime
+
+def updateHerokuTable():
+  out = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output('/home/codabool/scripts/bash-scripts/getHeroku.sh', shell=True)))
+  print(out)
+  client = MongoClient(os.getenv('MONGODB_URI'))
+  mon = client['codadash']['collections']
+  mon.update_one(
+    {'name': 'heroku'},
+    {'$set':
+      {
+        'hours': out,
+        'Last Ran': datetime.now(),
+      }
+    }
+  )
 
 try:
   load_dotenv()
@@ -30,6 +47,8 @@ try:
       }
     }
   )
+  # update heroku
+  updateHerokuTable()
   print('complete')
 except (Exception, psycopg2.Error) as error :
   print (error)
