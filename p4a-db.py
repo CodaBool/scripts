@@ -39,6 +39,8 @@ try:
 
   client = MongoClient(os.getenv('MONGODB_URI'))
   mon = client['codadash']['collections']
+  test_me = mon.find({'name': 'p4a'})
+  pprint(test_me)
   result = mon.update_one(
     {'name': 'p4a'},
     {'$set':
