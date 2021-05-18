@@ -49,11 +49,10 @@ try:
   )
   # update heroku
   updateHerokuTable()
-  print('complete')
+
+  # Close
+  cursor.close()
+  connection.close()
+
 except (Exception, psycopg2.Error) as error :
   print (error)
-finally:
-  if (connection):
-    cursor.close()
-    connection.close()
-    print("PostgreSQL connection is closed")
