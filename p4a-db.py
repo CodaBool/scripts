@@ -21,10 +21,10 @@ def getQbit():
 
 def getVPN():
   raw = subprocess.check_output('curl ifconfig.me', shell=True)
-  if (raw.decode('utf-8').find('67.8.111.220') == 0):
-    return 'inactive'
+  if (raw.decode('utf-8').find(os.getenv('IP')) == 0):
+    return False
   else:
-    return 'active'
+    return True
     
 try:
   load_dotenv()
@@ -35,9 +35,17 @@ try:
   transferring = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output("python3 /home/codabool/scripts/count-simple.py /docks n", shell=True)))
   space = getSpace()
   vpn = getVPN()
-  qbit = getQbit()
+  if getQbit() == 'inactive':
+    qbit = False
+  else:
+    qbit = True
 
-  pprint({
+  client = MongoClient(os.getenv('MONGODB_URI'))
+  mon = client['codadash']['collections']
+  cursor = mon.update_one(
+    {'name': 'p4a'},
+    {'$set':
+      {
         'Space Left': space,
         'Completed': completed,
         'Downloading': downloading,
@@ -45,26 +53,8 @@ try:
         'VPN Status': vpn,
         'Qbit Status': qbit,
         'Last Ran': datetime.now(),
-      })
-
-  # client = MongoClient(os.getenv('MONGODB_URI'))
-  # mon = client['codadash']['collections']
-  # test_me = mon.find({'name': 'p4a'})
-  # pprint(test_me)
-  # result = mon.update_one(
-  #   {'name': 'p4a'},
-  #   {'$set':
-  #     {
-  #       'Space Left': space,
-  #       'Completed': completed,
-  #       'Downloading': downloading,
-  #       'Transferring': transferring,
-  #       'VPN Status': vpn,
-  #       'Qbit Status': qbit,
-  #       'Last Ran': datetime.now(),
-  #     }
-  #   }
-  # )
-  # pprint(result)
+      }
+    }
+  )
 except (Exception) as error:
   print (error)
