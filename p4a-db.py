@@ -42,7 +42,7 @@ try:
 
   client = MongoClient(os.getenv('MONGODB_URI'))
   mon = client['codadash']['collections']
-  cursor = mon.update_one(
+  mon.update_one(
     {'name': 'p4a'},
     {'$set':
       {
