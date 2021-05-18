@@ -6,23 +6,9 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 from datetime import datetime
 
-def updateHerokuTable():
-  out = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output('/home/codabool/scripts/bash-scripts/getHeroku.sh', shell=True)))
-  print(out)
-  client = MongoClient(os.getenv('MONGODB_URI'))
-  mon = client['codadash']['collections']
-  mon.update_one(
-    {'name': 'heroku'},
-    {'$set':
-      {
-        'hours': out,
-        'Last Ran': datetime.now(),
-      }
-    }
-  )
-
 try:
   load_dotenv()
+
   connection = psycopg2.connect(os.getenv('URI'))
   cursor = connection.cursor()
   cursor.execute(f"SELECT * FROM comment WHERE status='review'")
@@ -32,8 +18,11 @@ try:
   cursor.execute(f'SELECT SUM (views) FROM post')
   rows = cursor.fetchall()
 
-  print(f'comments: {comments_to_review}')
-  print(f'views: {int(rows[0][0])}')
+  out = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output('/home/codabool/scripts/bash-scripts/getHeroku.sh', shell=True)))
+
+  # print(f'comments: {comments_to_review}')
+  # print(f'views: {int(rows[0][0])}')
+  # print(f'hours: {out}')
 
   client = MongoClient(os.getenv('MONGODB_URI'))
   mon = client['codadash']['collections']
@@ -43,12 +32,11 @@ try:
       {
         'Comments': comments_to_review,
         'Views': int(rows[0][0]),
+        'hours': out,
         'Last Ran': datetime.now(),
       }
     }
   )
-  # update heroku
-  updateHerokuTable()
 
   # Close
   cursor.close()
