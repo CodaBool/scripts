@@ -39,7 +39,7 @@ try:
   # update mom
   internal_space = getInternalSpace()
   external_space = getExternalSpace()
-  videos = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output("/usr/bin/python3 /home/codabool/scripts/count-simple.py /mnt/sd1/ven/media/ n", shell=True))) # requires sudo for drive
+  # videos = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output("/usr/bin/python3 /home/codabool/scripts/count-simple.py /mnt/sd1/ven/media/ n", shell=True))) # requires sudo for drive
   client = MongoClient(os.getenv('MONGODB_URI'))
   mon = client['codadash']['collections']
   mon.update_one(
@@ -48,7 +48,7 @@ try:
       {
         'Space Left Internal': internal_space,
         'Space Left External': external_space,
-        'Videos': videos,
+        # 'Videos': videos,
         'Last Ran': datetime.now(),
       }
     }
