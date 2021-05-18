@@ -1,11 +1,11 @@
-import psycopg2
 import os
 import re
 import subprocess
 import shutil
-import time
-from datetime import datetime
+from pymongo import MongoClient
 from dotenv import load_dotenv
+from datetime import datetime
+from pprint import pprint
 
 def getSpace():
   total, used, free = shutil.disk_usage(__file__)
@@ -26,27 +26,33 @@ def getVPN():
   else:
     return 'active'
     
-def executeQuery(cursor, connection):  
+try:
+  load_dotenv()
+
+  # get variables
   completed = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output("python3 /home/codabool/scripts/count-simple.py /home/codabool/qbit/complete n", shell=True)))
   downloading = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output("/home/codabool/tor/qbt/qbt torrent list -F list -f downloading | grep -o Hash | wc -l", shell=True)))
   transferring = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output("python3 /home/codabool/scripts/count-simple.py /docks n", shell=True)))
   space = getSpace()
-  qbit = getQbit()
   vpn = getVPN()
-  # os.system('touch /home/codabool/db-s.{space}-c.{completed}-d.{downloading}-t{transferring}-s{getStatus()}-q{getQbitStatus()}')
-  # print(f'UPDATE p4a SET "Space Left"={space}, "Completed"={completed}, "Downloading"={downloading}, "Transferring"={transferring}, "VPN Status"=\'{vpn}\', "QBit Status"=\'{qbit}\', "Last Ran"=CURRENT_TIMESTAMP;')
-  cursor.execute(f'UPDATE p4a SET "Space Left"={space}, "Completed"={completed}, "Downloading"={downloading}, "Transferring"={transferring}, "VPN Status"=\'{vpn}\', "QBit Status"=\'{qbit}\', "Last Ran"=CURRENT_TIMESTAMP;') # syntax requires > python 3.6 
+  qbit = getQbit()
 
-try:
-  load_dotenv()
-  connection = psycopg2.connect(os.getenv('URI'))
-  cursor = connection.cursor()
-  executeQuery(cursor, connection)
-  connection.commit()
-except (Exception, psycopg2.Error) as error :
-  print ("Error while connecting to PostgreSQL", error)
-finally:
-  if (connection):
-    cursor.close()
-    connection.close()
-    print("PostgreSQL connection is closed")
+  client = MongoClient(os.getenv('MONGODB_URI'))
+  mon = client['codadash']['collections']
+  result = mon.update_one(
+    {'name': 'p4a'},
+    {'$set':
+      {
+        'Space Left': space,
+        'Completed': completed,
+        'Downloading': downloading,
+        'Transferring': transferring,
+        'VPN Status': vpn,
+        'Qbit Status': qbit,
+        'Last Ran': datetime.now(),
+      }
+    }
+  )
+  pprint(result)
+except (Exception) as error:
+  print (error)
