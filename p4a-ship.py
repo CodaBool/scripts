@@ -52,7 +52,7 @@ MOVIE_DIR = "/docks/movie/"
 SHOWS_DIR = "/docks/shows/"
 ROOT = '/docks/'
 TYPES = ['mp4', 'mkv', 'avi']
-SSH = 'root@192.168.1.25'
+SSH = 'root@192.168.0.25'
 IM_DONE_FILE = '/home/codabool/scripts/im.done'
 
 print('\n==================')
