@@ -18,7 +18,7 @@ def getExternalSpace():
 def executeQuery(cursor, connection):
   # new = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output("python3 ~/scripts/count-simple.py /mnt/sd1/ven/jellyfin/new n", shell=True)))
   space = getSpace() # this is not as useful as external drive space, could use this if I add new column for it in db
-  new = 3
+  new = 0
   # externalSpace = getExternalSpace()
   lastRan = datetime.now()
   print(f'UPDATE pi8 SET "Space Left"={space}, "New Videos"={new}, "Last Ran"=\'{lastRan}\' WHERE id=1;')
