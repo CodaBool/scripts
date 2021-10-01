@@ -18,28 +18,13 @@ def getExternalSpace():
   print('external storage ---> ', (100 - int(newout.split()[10][:-1])))
   return 100 - int(newout.split()[10][:-1])
 
-def updateHerokuTable():
-  out = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output('/home/codabool/scripts/bash-scripts/getHeroku.sh', shell=True)))
-  print(out)
-  client = MongoClient(os.getenv('MONGODB_URI'))
-  mon = client['codadash']['collections']
-  mon.update_one(
-    {'name': 'heroku'},
-    {'$set':
-      {
-        'hours': out,
-        'Last Ran': datetime.now(),
-      }
-    }
-  )
-
 try:
   load_dotenv()
   
   # update mom
   internal_space = getInternalSpace()
   external_space = getExternalSpace()
-  videos = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output("python3 /home/codabool/scripts/count-simple.py /mnt/sd1/ven/media/ n", shell=True))) # requires sudo for drive
+  videos = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output("/usr/bin/python3 /home/codabool/scripts/count-simple.py /mnt/sd1/ven/media/ n", shell=True))) # requires sudo for drive
   client = MongoClient(os.getenv('MONGODB_URI'))
   mon = client['codadash']['collections']
   mon.update_one(
@@ -53,9 +38,5 @@ try:
       }
     }
   )
-
-  # update heroku
-  updateHerokuTable()
-  
 except (Exception) as error :
   print (error)
