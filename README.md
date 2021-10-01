@@ -2,16 +2,16 @@
 - add to log if transcode takes very little time
 - create script that checks if video files are small
 - make logs append and only be cleared every week
-- add test if there is a 'shipment in progress file in pi4 Documents'
+- add test if there is a 'shipment in progress file in p4a Documents'
 
 # Working
-- pi4 dock
+- p4a dock
 - win dock
 - pi8 dock (unfinished)
 
 # SCP
-scp -r ./shows codabool@192.168.1.32:/mnt/sd1/raw/
-scp -r * codabool@192.168.1.32:/mnt/sd1/ven/new
+scp -r ./shows codabool@192.168.0.207:/mnt/sd1/raw/
+scp -r * codabool@192.168.0.25:/mnt/sd1/ven/new
 
 python /d/Utilities/codadash-scripts/win-manage-docks.py
 
@@ -29,81 +29,61 @@ ________________________________________________________________________________
 
 # Database
 #### create tables
-CREATE TABLE pi4 (
-  id              serial,
-  "Space Left"    real,
-  "Completed"       integer,
-  "Downloading"     integer,
-  "Total"           integer,
-  "Last Ran"         timestamp,
-  "Transferring"    integer,
-  "Device"         varchar(255)
+CREATE TABLE p4a (
+  "Space Left"      text,
+  "Completed"       text,
+  "Downloading"     text,
+  "Transferring"    text,
+  "VPN Status"      text,
+  "QBit Status"     text,
+  "Last Ran"        timestamp
 );
-
-CREATE TABLE pi8 (
-  id              serial,
-  "Space Left"    real,
-  "New Videos"       integer,
-  "Last Ran"         timestamp,
-  "Device"         varchar(255)
+CREATE TABLE p8a (
+  "Space Left"       text,
+  "Last Ran"         timestamp
 );
-
-CREATE TABLE win (
-  id              serial,
-  "Transcoding"       integer,
-  "Transferring"     integer,
-  "Waiting"           integer,
-  "Last Ran"         timestamp,
-  "Device"         varchar(255)
-);
-
 CREATE TABLE mom (
-  id              serial,
-
-  "Transcoding"       integer,
-  "Transferring"     integer,
-  "Waiting"           integer,
-
-  "Last Ran"         timestamp,
-  "Device"         varchar(255)
+  "Space Left Internal"    text,
+  "Space Left External"    text,
+  "Videos"                 text,
+  "Last Ran"               timestamp
 );
 
 #### add dummy row to initialize
-INSERT INTO pi4 ("Device") VALUES ('Pi 4');
-INSERT INTO pi8 ("Device") VALUES ('Pi 8');
-INSERT INTO win ("Device") VALUES ('Windows');
-INSERT INTO win ("Device") VALUES ('Server');
+INSERT INTO p4a ("Space Left", "Completed", "Downloading", "Transferring", "VPN Status", "QBit Status", "Last Ran") VALUES ('5', '5', '5', '5', '5', '5', CURRENT_TIMESTAMP);
+INSERT INTO p8a ("Space Left", "Last Ran") VALUES ('5', CURRENT_TIMESTAMP);
+INSERT INTO mom ("Space Left Internal", "Space Left External", "Videos", "Last Ran") VALUES ('5', '5', '5', CURRENT_TIMESTAMP);
 
 #### update in code
-UPDATE pi4 SET "Space Left"={space}, "Completed"={completed}, "Downloading"={downloading}, "Total"={total}, "Last Ran"=\'{lastRan}\', "Transferring"={transferring} WHERE id=1;
+UPDATE p4a SET "Space Left"={space}, Completed"={complete}, "Downloading"={download}, "Transferring"={ready}, "VPN Status"={status}, "Last Ran"=CURRENT_TIMESTAMP;
 UPDATE pi8 SET "Space Left"={space}, "New Videos"={new}, "Last Ran"=\'{lastRan}\'  WHERE id=1;
 UPDATE win SET "Transcoding"={transcoding}, "Transferring"={transferring}, "Waiting"={waiting}, "Last Ran"=\'{lastRan}\' WHERE id=1;
 
 #### drop tables
-drop table pi4;
-drop table pi8;
+drop table p4a;
+drop table p8a;
 drop table win;
 drop table mom;
 
 _____________________________________________________________________________________
 
 # Bashrc
-## pi4 /etc/bash.bashrc
-alias pi="ssh codabool@192.168.1.32"
+## p4a /etc/bash.bashrc
+alias pi="ssh codabool@192.168.0.207"
 function m() {
-  scp -r "$PWD" codabool@192.168.1.32:/mnt/sd1/raw/
+  scp -r "$PWD" codabool@192.168.0.207:/mnt/sd1/raw/
 }
 
 ## pi8 /etc/bash.bashrc
 alias umnt="sudo umount /mnt/sd1"
 alias mnt="sudo mount -o rw,users,uid=1000,umask=0001 /dev/sda1 /mnt/sd1"
-alias pi4="ssh codabool@192.168.1.16"
+alias p4a="ssh codabool@192.168.1.16"
 
 # win ~/.bashrc
 alias transcode-all="python /d/utilities/codadash-scripts/tran-win.py ./ y n 24"
-alias pi4="ssh codabool@192.168.1.34"
-alias pi4-get="sftp codabool@192.168.1.34:/home/codabool/Downloads/qbit/complete"
-alias pi8="ssh codabool@192.168.1.32"
+alias p4a="ssh codabool@192.168.0.244"
+alias p4a-get="sftp codabool@192.168.0.244:/home/codabool/Downloads/qbit/complete"
+alias pi8="ssh codabool@192.168.0.207"
 alias transcode-docks="python /d/utilities/codadash-scripts/manage-docks-windows.py"
 alias count-type="python /d/utilities/codadash-scripts/count-simple.py ./ True"
 alias count="python /d/utilities/codadash-scripts/read-all-windows.py ./ True"
@@ -157,12 +137,12 @@ alexa() {
 }
 
 # Bashrc windows git-bash terminal
-alias jazz="ssh -t codabool@192.168.1.32 \"~/Documents/alexa-remote-control/alexa_remote_control.sh -d 'Echo Bed' -r s23356\""
-alias play="ssh -t codabool@192.168.1.32 \"~/Documents/alexa-remote-control/alexa_remote_control.sh -d 'Echo Bed' -e play\""
-alias pause="ssh -t codabool@192.168.1.32 \"~/Documents/alexa-remote-control/alexa_remote_control.sh -d 'Echo Bed' -e pause\""
-alias stop="ssh -t codabool@192.168.1.32 \"~/Documents/alexa-remote-control/alexa_remote_control.sh -d 'Echo Bed' -e pause\""
+alias jazz="ssh -t codabool@192.168.0.207 \"~/Documents/alexa-remote-control/alexa_remote_control.sh -d 'Echo Bed' -r s23356\""
+alias play="ssh -t codabool@192.168.0.207 \"~/Documents/alexa-remote-control/alexa_remote_control.sh -d 'Echo Bed' -e play\""
+alias pause="ssh -t codabool@192.168.0.207 \"~/Documents/alexa-remote-control/alexa_remote_control.sh -d 'Echo Bed' -e pause\""
+alias stop="ssh -t codabool@192.168.0.207 \"~/Documents/alexa-remote-control/alexa_remote_control.sh -d 'Echo Bed' -e pause\""
 alexa() {
-  ssh -t codabool@192.168.1.32 "~/Documents/alexa-remote-control/alexa_remote_control.sh" $@
+  ssh -t codabool@192.168.0.207 "~/Documents/alexa-remote-control/alexa_remote_control.sh" $@
 }
 auto() {
   args=$@
@@ -170,7 +150,7 @@ auto() {
 }
 speak() {
   args=$@
-  ssh -t codabool@192.168.1.32 "~/Documents/alexa-remote-control/alexa_remote_control.sh" -d 'Echo\ Bed' -e speak:"${args// /\\ }"
+  ssh -t codabool@192.168.0.207 "~/Documents/alexa-remote-control/alexa_remote_control.sh" -d 'Echo\ Bed' -e speak:"${args// /\\ }"
 }
 vol() {
   alexa -d 'Echo\ Bed' -e vol:$1
@@ -185,4 +165,4 @@ chmod +x ./alexa/local.sh
 
 [github](https://github.com/thorsten-gehrig/alexa-remote-control)
 
-repo test
+repo test 3
