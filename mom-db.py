@@ -24,7 +24,8 @@ try:
   # update mom
   internal_space = getInternalSpace()
   external_space = getExternalSpace()
-  videos = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output("/usr/bin/python3 /home/codabool/scripts/count-simple.py /mnt/sd1/ven/media/ n", shell=True))) # requires sudo for drive
+  videos = 1000
+  # videos = re.sub('b|\'|n|\\\\', '', str(subprocess.check_output("/usr/bin/python3 /home/codabool/scripts/count-simple.py /mnt/sd1/ven/media/ n", shell=True))) # requires sudo for drive
   client = MongoClient(os.getenv('MONGODB_URI'))
   mon = client['codadash']['collections']
   mon.update_one(
