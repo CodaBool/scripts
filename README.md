@@ -10,14 +10,14 @@
 - pi8 dock (unfinished)
 
 # SCP
-scp -r ./shows codabool@192.168.1.32:/mnt/sd1/raw/
-scp -r * codabool@192.168.1.32:/mnt/sd1/ven/new
+scp -r ./shows codabool@192.168.0.207:/mnt/sd1/raw/
+scp -r * codabool@192.168.0.25:/media/book/new
 
 python /d/Utilities/codadash-scripts/win-manage-docks.py
 
 script will transcode anything that is placed in the /c/Transcode/pull folder
 There is a required .ready file to be at the root of whatever is being transferred.
-Final transcodes are scp into /mnt/sd1/ven/new 
+Final transcodes are scp into /media/book/new 
 
 _____________________________________________________________________________________
 
@@ -69,9 +69,9 @@ ________________________________________________________________________________
 
 # Bashrc
 ## p4a /etc/bash.bashrc
-alias pi="ssh codabool@192.168.1.32"
+alias pi="ssh codabool@192.168.0.207"
 function m() {
-  scp -r "$PWD" codabool@192.168.1.32:/mnt/sd1/raw/
+  scp -r "$PWD" codabool@192.168.0.207:/mnt/sd1/raw/
 }
 
 ## pi8 /etc/bash.bashrc
@@ -81,9 +81,9 @@ alias p4a="ssh codabool@192.168.1.16"
 
 # win ~/.bashrc
 alias transcode-all="python /d/utilities/codadash-scripts/tran-win.py ./ y n 24"
-alias p4a="ssh codabool@192.168.1.34"
-alias p4a-get="sftp codabool@192.168.1.34:/home/codabool/Downloads/qbit/complete"
-alias pi8="ssh codabool@192.168.1.32"
+alias p4a="ssh codabool@192.168.0.244"
+alias p4a-get="sftp codabool@192.168.0.244:/home/codabool/Downloads/qbit/complete"
+alias pi8="ssh codabool@192.168.0.207"
 alias transcode-docks="python /d/utilities/codadash-scripts/manage-docks-windows.py"
 alias count-type="python /d/utilities/codadash-scripts/count-simple.py ./ True"
 alias count="python /d/utilities/codadash-scripts/read-all-windows.py ./ True"
@@ -137,12 +137,12 @@ alexa() {
 }
 
 # Bashrc windows git-bash terminal
-alias jazz="ssh -t codabool@192.168.1.32 \"~/Documents/alexa-remote-control/alexa_remote_control.sh -d 'Echo Bed' -r s23356\""
-alias play="ssh -t codabool@192.168.1.32 \"~/Documents/alexa-remote-control/alexa_remote_control.sh -d 'Echo Bed' -e play\""
-alias pause="ssh -t codabool@192.168.1.32 \"~/Documents/alexa-remote-control/alexa_remote_control.sh -d 'Echo Bed' -e pause\""
-alias stop="ssh -t codabool@192.168.1.32 \"~/Documents/alexa-remote-control/alexa_remote_control.sh -d 'Echo Bed' -e pause\""
+alias jazz="ssh -t codabool@192.168.0.207 \"~/Documents/alexa-remote-control/alexa_remote_control.sh -d 'Echo Bed' -r s23356\""
+alias play="ssh -t codabool@192.168.0.207 \"~/Documents/alexa-remote-control/alexa_remote_control.sh -d 'Echo Bed' -e play\""
+alias pause="ssh -t codabool@192.168.0.207 \"~/Documents/alexa-remote-control/alexa_remote_control.sh -d 'Echo Bed' -e pause\""
+alias stop="ssh -t codabool@192.168.0.207 \"~/Documents/alexa-remote-control/alexa_remote_control.sh -d 'Echo Bed' -e pause\""
 alexa() {
-  ssh -t codabool@192.168.1.32 "~/Documents/alexa-remote-control/alexa_remote_control.sh" $@
+  ssh -t codabool@192.168.0.207 "~/Documents/alexa-remote-control/alexa_remote_control.sh" $@
 }
 auto() {
   args=$@
@@ -150,7 +150,7 @@ auto() {
 }
 speak() {
   args=$@
-  ssh -t codabool@192.168.1.32 "~/Documents/alexa-remote-control/alexa_remote_control.sh" -d 'Echo\ Bed' -e speak:"${args// /\\ }"
+  ssh -t codabool@192.168.0.207 "~/Documents/alexa-remote-control/alexa_remote_control.sh" -d 'Echo\ Bed' -e speak:"${args// /\\ }"
 }
 vol() {
   alexa -d 'Echo\ Bed' -e vol:$1

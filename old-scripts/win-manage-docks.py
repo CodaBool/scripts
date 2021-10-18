@@ -78,8 +78,8 @@ def main():
   try:
     load_dotenv()
     source = 'C:\\Transcode\\push\\' + folder
-    print('cmd /c pscp -P 22 -pw ' + os.getenv('PI8_PASS') + ' -r \"' + source + '\" codabool@192.168.1.32:/mnt/sd1/ven/jellyfin/new')
-    os.system('cmd /c pscp -P 22 -pw ' + os.getenv('PI8_PASS') + ' -r \"' + source + '\" codabool@192.168.1.32:/mnt/sd1/ven/jellyfin/new')
+    print('cmd /c pscp -P 22 -pw ' + os.getenv('PI8_PASS') + ' -r \"' + source + '\" codabool@192.168.0.207:/media/book/jellyfin/new')
+    os.system('cmd /c pscp -P 22 -pw ' + os.getenv('PI8_PASS') + ' -r \"' + source + '\" codabool@192.168.0.207:/media/book/jellyfin/new')
     
     # Delete folder
     print('DELETE: rmdir /Q /S \"' + ROOT + '\\push\\' + folder + '\"')

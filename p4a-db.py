@@ -42,6 +42,17 @@ try:
 
   client = MongoClient(os.getenv('MONGODB_URI'))
   mon = client['codadash']['collections']
+  print('uri =', os.getenv('MONGODB_URI'))
+  print('mon', type(mon))
+  pprint({
+    'Space Left': space,
+    'Completed': completed,
+    'Downloading': downloading,
+    'Transferring': transferring,
+    'VPN Status': vpn,
+    'Qbit Status': qbit,
+    'Last Ran': datetime.now(),
+  })
   mon.update_one(
     {'name': 'p4a'},
     {'$set':

@@ -20,7 +20,7 @@ def getExternalSpace():
 
 try:
   load_dotenv()
-  
+
   # update mom
   internal_space = getInternalSpace()
   external_space = getExternalSpace()

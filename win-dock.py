@@ -27,8 +27,8 @@ try:
   folder = findShipment(getListOfFiles('/docks/'))
 
   # Ship folder
-  print('cmd /c pscp -P 22 -pw ' + os.getenv('MOM_PASS') + ' -r \"' + folder + '\" codabool@192.168.1.25:/docks')
-  os.system('cmd /c pscp -P 22 -pw ' + os.getenv('MOM_PASS') + ' -r \"' + folder + '\" codabool@192.168.1.25:/docks')
+  print('cmd /c pscp -P 22 -pw ' + os.getenv('MOM_PASS') + ' -r \"' + folder + '\" codabool@192.168.0.25:/docks')
+  os.system('cmd /c pscp -P 22 -pw ' + os.getenv('MOM_PASS') + ' -r \"' + folder + '\" codabool@192.168.0.25:/docks')
   
   # Delete folder
   # print('DELETE: rmdir /Q /S \"' + '\\Transcode' + '\\push\"')
