@@ -11,13 +11,13 @@
 
 # SCP
 scp -r ./shows codabool@192.168.0.207:/mnt/sd1/raw/
-scp -r * codabool@192.168.0.25:/mnt/sd1/ven/new
+scp -r * codabool@192.168.0.25:/media/book/new
 
 python /d/Utilities/codadash-scripts/win-manage-docks.py
 
 script will transcode anything that is placed in the /c/Transcode/pull folder
 There is a required .ready file to be at the root of whatever is being transferred.
-Final transcodes are scp into /mnt/sd1/ven/new 
+Final transcodes are scp into /media/book/new 
 
 _____________________________________________________________________________________
 
