@@ -29,7 +29,7 @@ def moveFolder(listOfFiles, isMovie):
       pathArr = _file.split("/")
       readyFolderPath = _file[:-8]
       readyFolderName = pathArr[-2:][0]
-      
+
       print("SSH Copy of ...", readyFolderName)
       if isMovie == True:
         # print("DEBUG " + "scp -r \"" + readyFolderPath + "\" " + SSH + ":/media/book/media/movies")
@@ -44,7 +44,7 @@ def moveFolder(listOfFiles, isMovie):
         # print("DEBUG " + "scp " + IM_DONE_FILE + " " + SSH + ":\'\"/media/book/media/shows/" + readyFolderName + "\"\'")
         os.system("scp " + IM_DONE_FILE + " " + SSH + ":\'\"/media/book/media/shows/" + readyFolderName + "\"\'")
       print("SSH Copy Complete\nRemoving shipment folder from docks")
-      print("rm -rf \"" + readyFolderPath + "\"")
+      # print("rm -rf \"" + readyFolderPath + "\"")
       os.system("rm -rf \"" + readyFolderPath + "\"")
 
 
