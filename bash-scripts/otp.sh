@@ -11,14 +11,13 @@ printf "2. ${RED}google${NC}\n"
 printf "3. ${RED}aws${NC}\n"
 printf "4. ${RED}divvy${NC}\n"
 printf "5. ${RED}slack${NC}\n"
-printf "6. ${RED}slack${NC}\n"
-printf "7. ${RED}akamai${NC}\n"
-printf "8. ${GREEN}facebook${NC}\n"
-printf "9. ${GREEN}bitwarden${NC}\n"
-printf "10. ${GREEN}stripe${NC}\n"
-printf "11. ${GREEN}aws${NC}\n"
-printf "12. ${GREEN}npm${NC}\n"
-printf "13. ${GREEN}aws${NC}\n"
+printf "6. ${RED}akamai${NC}\n"
+printf "7. ${GREEN}facebook${NC}\n"
+printf "8. ${GREEN}bitwarden${NC}\n"
+printf "9. ${GREEN}stripe${NC}\n"
+printf "10. ${GREEN}aws${NC}\n"
+printf "11. ${GREEN}npm${NC}\n"
+printf "12. ${GREEN}aws${NC}\n"
 
 printf "Enter a number to generate an otp for an issuer: "
 read input
@@ -47,8 +46,6 @@ elif [[ $input == 11 ]]; then
   oathtool -b --totp SECRET_HERE
 elif [[ $input == 12 ]]; then
   oathtool -b --totp SECRET_HERE
-elif [[ $input == 13 ]]; then
-  oathtool -b --totp SECRET_HERE
 else
-  echo "You did not enter a number from 1 - 13"
+  echo "You did not enter a number from 1 - 12"
 fi
