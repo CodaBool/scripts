@@ -3,6 +3,8 @@ import os.path, time
 from datetime import datetime
 from os.path import join, isdir, isfile
 
+# if a file is older than a minute, label for shipping
+
 def getListOfFiles(directory): # create a list of file and sub directories
   listOfFile = os.listdir(directory) # names in the given directory
   allFiles = list()
@@ -31,8 +33,9 @@ def placeShippingFile(listOfFiles):
         print("Folder altered", dif, "minutes ago. Label will be added after 1 unaltered minute")
     print('==================\n')
 
-MOVIE_DIR = "/docks/movie/"
-SHOWS_DIR = "/docks/shows/"
+# MOVIES_DIR = "/home/codabool/radarr/movies"
+# TV_DIR = "/home/codabool/sonarr/tv"
+COMPLETE_DIR = "/home/codabool/qbit/complete"
 
-placeShippingFile(getListOfFiles(MOVIE_DIR))
-placeShippingFile(getListOfFiles(SHOWS_DIR))
+placeShippingFile(getListOfFiles(COMPLETE_DIR))
+# placeShippingFile(getListOfFiles(TV_DIR))

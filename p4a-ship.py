@@ -22,7 +22,7 @@ def countVideos(listOfFiles):
         totalVideos += 1
   return totalVideos
 
-def moveFolder(listOfFiles, isMovie):
+def moveFolder(listOfFiles):
   print(countVideos(listOfFiles), "videos found\n")
   for _file in listOfFiles:
     if "ship.mom" in _file:
@@ -31,28 +31,35 @@ def moveFolder(listOfFiles, isMovie):
       readyFolderName = pathArr[-2:][0]
 
       print("SSH Copy of ...", readyFolderName)
-      if isMovie == True:
-        # print("DEBUG " + "scp -r \"" + readyFolderPath + "\" " + SSH + ":/media/book/media/movies")
-        os.system("scp -r \"" + readyFolderPath + "\" " + SSH + ":/media/book/media/movies")
-        print("SSH Adding im.done file")
-        # print("DEBUG " + "scp " + IM_DONE_FILE + " " + SSH + ":\'\"/media/book/media/movies/" + readyFolderName + "\"\'")
-        os.system("scp " + IM_DONE_FILE + " " + SSH + ":\'\"/media/book/media/movies/" + readyFolderName + "\"\'")
-      else:
-        # print("DEBUG " + "scp -r \"" + readyFolderPath + "\" " + SSH + ":/media/book/media/shows")
-        os.system("scp -r \"" + readyFolderPath + "\" " + SSH + ":/media/book/media/shows")
-        print("SSH Adding im.done file")
-        # print("DEBUG " + "scp " + IM_DONE_FILE + " " + SSH + ":\'\"/media/book/media/shows/" + readyFolderName + "\"\'")
-        os.system("scp " + IM_DONE_FILE + " " + SSH + ":\'\"/media/book/media/shows/" + readyFolderName + "\"\'")
+      # if isMovie == True:
+      #   # print("DEBUG " + "scp -r \"" + readyFolderPath + "\" " + SSH + ":/hdd/media/movies")
+      #   os.system("scp -r \"" + readyFolderPath + "\" " + SSH + ":/hdd/media/movies")
+      #   print("SSH Adding im.done file")
+      #   # print("DEBUG " + "scp " + IM_DONE_FILE + " " + SSH + ":\'\"/hdd/media/movies/" + readyFolderName + "\"\'")
+      #   os.system("scp " + IM_DONE_FILE + " " + SSH + ":\'\"/hdd/media/movies/" + readyFolderName + "\"\'")
+      # else:
+      #   # print("DEBUG " + "scp -r \"" + readyFolderPath + "\" " + SSH + ":/hdd/media/tv")
+      #   os.system("scp -r \"" + readyFolderPath + "\" " + SSH + ":/hdd/media/tv")
+      #   print("SSH Adding im.done file")
+      #   # print("DEBUG " + "scp " + IM_DONE_FILE + " " + SSH + ":\'\"/hdd/media/tv/" + readyFolderName + "\"\'")
+      #   os.system("scp " + IM_DONE_FILE + " " + SSH + ":\'\"/hdd/media/tv/" + readyFolderName + "\"\'")
+        # print("DEBUG " + "scp -r \"" + readyFolderPath + "\" " + SSH + ":/hdd/media/movies")
+
+      os.system("scp -r \"" + readyFolderPath + "\" " + SSH + ":/hdd/qbit/complete")
+      print("SSH Adding im.done file")
+      print("DEBUG " + "scp " + IM_DONE_FILE + " " + SSH + ":\'\"/hdd/media/movies/" + readyFolderName + "\"\'")
+      os.system("scp " + IM_DONE_FILE + " " + SSH + ":\'\"/hdd/qbit/complete/" + readyFolderName + "\"\'")
+
       print("SSH Copy Complete\nRemoving shipment folder from docks")
-      # print("rm -rf \"" + readyFolderPath + "\"")
+      print("rm -rf \"" + readyFolderPath + "\"")
       os.system("rm -rf \"" + readyFolderPath + "\"")
 
-
-MOVIE_DIR = "/docks/movie/"
-SHOWS_DIR = "/docks/shows/"
-ROOT = '/docks/'
+COMPLETE_DIR = "/home/codabool/qbit/complete"
+# MOVIES_DIR = "/home/codabool/radarr/movies"
+# TV_DIR = "/home/codabool/sonarr/tv"
+ROOT = '/home/codabool/'
 TYPES = ['mp4', 'mkv', 'avi']
-SSH = 'root@192.168.0.25'
+SSH = 'codabool@192.168.0.25'
 IM_DONE_FILE = '/home/codabool/scripts/im.done'
 
 print('\n==================')
@@ -60,15 +67,20 @@ if isfile(ROOT + "shipping.started"):
   print("Shipment in progress try again later.\nTo force start remove " + ROOT + "shipping.started")
 else:
   try:
-    moveMovie = sys.argv[1] # throws error if no arguments in cli
     os.system("touch " + ROOT + "shipping.started")
-    if moveMovie == 'true':
-      print('checking for movies')
-      moveFolder(getListOfFiles(MOVIE_DIR), True)
-    else:
-      print('checking for shows')
-      moveFolder(getListOfFiles(SHOWS_DIR), False)
+    print('checking for media')
+    moveFolder(getListOfFiles(COMPLETE_DIR))
     os.system("rm " + ROOT + "shipping.started") # remove shipment file to allow future shipments
+
+    # moveMovie = sys.argv[1] # throws error if no arguments in cli
+    # os.system("touch " + ROOT + "shipping.started")
+    # if moveMovie == 'true':
+    #   print('checking for movies')
+    #   moveFolder(getListOfFiles(MOVIES_DIR), True)
+    # else:
+    #   print('checking for shows')
+    #   moveFolder(getListOfFiles(TV_DIR), False)
+    # os.system("rm " + ROOT + "shipping.started") # remove shipment file to allow future shipments
   except:
     # os.system("rm " + ROOT + "shipping.started") # remove shipment file
     print("""== Unknown Error =
