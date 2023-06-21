@@ -77,7 +77,12 @@ writeLog () {
   fi
 }
 
-aws logs tail /aws/lambda/$1 --since $2 |  while read -r line
+filter=""
+if [ "$#" -eq 3 ]; then
+  filter='{ $.level = "error"  || $.level = "fatal" || $.level = "panic" }'
+fi
+
+aws logs tail /aws/lambda/$1 --since $2 --filter-pattern "$filter" |  while read -r line
 do
   writeLog "$line"
 done
