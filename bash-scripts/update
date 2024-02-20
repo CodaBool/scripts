@@ -1,0 +1,6 @@
+sudo pacman -Sy archlinux-keyring --noconfirm && sudo pacman -Su --noconfirm
+
+yay
+
+echo "kernal = $(uname -r)"
+systemctl --version | head -n 1

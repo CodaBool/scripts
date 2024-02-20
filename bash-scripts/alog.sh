@@ -20,7 +20,7 @@ writeLog () {
     message=$(echo "${log}" | jq -r .message)
     level=$(echo "${log}" | jq -r .level)
     func=$(echo "${log}" | jq -r .func)
-    
+
     # zerolog will put errors under the error field
     # and omit message field
     if [ "$message" = "null" ]
@@ -82,14 +82,14 @@ if [ "$#" -eq 3 ]; then
   filter='{ $.level = "error"  || $.level = "fatal" || $.level = "panic" }'
 fi
 
-aws logs tail /aws/lambda/$1 --since $2 --filter-pattern "$filter" |  while read -r line
+aws logs tail /aws/$1 --since $2 --filter-pattern "$filter" |  while read -r line
 do
   writeLog "$line"
 done
 
 while true
 do
-  aws logs tail /aws/lambda/$1 --since 21s |  while read -r line
+  aws logs tail /aws/$1 --since 21s |  while read -r line
   do
     writeLog "$line"
   done
