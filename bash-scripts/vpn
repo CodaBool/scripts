@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# requires the openconnect oath-toolkit packages
+
+source ~/.env
+# DOMAINS="artifactory.cms.gov ci.backends.cms.gov splunk.aws.healthcare.gov cloudtamer.cms.gov cloud.cms.gov amazonaws.com"
+
+# replace with your machine's /etc/hosts file contents
+# ORIGINAL_HOSTS="# Added by Docker Desktop
+# # To allow the same kube context to work on the host and the container:
+# 127.0.0.1       kubernetes.docker.internal"
+
+# potentially also useful
+# "s3-website-us-east-1.amazonaws.com"
+# "cloudbeesjenkins.cms.gov"
+
+if [ "$1" = "full" ]; then
+  printf '%s\n%s\n' $EUA_PASSWORD $(oathtool -b --totp $TOTP_SECRET) | sudo openconnect -b -u $EUA_USERNAME --passwd-on-stdin --pfs cloudvpn.cms.gov
+  printf "\n👀 all traffic through VPN"
+elif [ "$1" = "disconnect" ]; then
+  sudo pkill -SIGINT openconnect
+  echo "🔌 disconnected"
+# elif [ "$1" = "reset" ]; then
+#   sudo systemctl stop vpn
+#   echo "➰ reset hosts"
+#   sudo sh -c "echo \"$ORIGINAL_HOSTS\" > /etc/hosts"
+# elif [ "$1" = "status" ]; then
+#   systemctl is-active vpn.service
+elif [ "$1" = "split" ]; then
+  sudo systemctl start vpn
+  # echo "⚠️ use systemctl for vpn splits"
+  # printf '%s\n%s\n' $EUA_PASSWORD $(oathtool -b --totp $TOTP_SECRET) | sudo openconnect -u $EUA_USERNAME --passwd-on-stdin --pfs -s "vpn-slice 192.168.1.0/24 $DOMAINS --no-ns-hosts --verbose" cloudvpn.cms.gov
+fi

@@ -1,0 +1,200 @@
+#!/bin/bash
+
+# WARN: it's not enough to just let Arch auto update.
+# the output of pacman and paru should be overviewed every week
+# in addition you should be subscribed to the email list of arch news
+# you can do this here: https://lists.archlinux.org
+# to assist with reading the output of the important logs I have this bash function
+# which I use to read the relevant part for action items
+# it can be ran w/o an argument to run this weeks
+# or ran with a week number to see what the output was for that week
+# in addition a script is written to the desktop which performs the same bash code
+
+# update_logs() {
+#   file=${1:-$(date +%V)}
+#   echo "last update happened at:"
+#   head -n 1 /home/codabool/Documents/update_logs/update.$file.log
+#   awk '/========== General ==========/ {flag=1} /========== update complete, printing new versions ==========/{flag=0} flag' "/home/codabool/Documents/update_logs/update.$file.log" | less -R
+# }
+
+# INFO: if you get very slow installs use reflector for the fastest mirrors
+
+# records versions before and after updating
+# updates all of official, AUR, and flatpaks to latest
+
+# this will keep a running log of the last 52 weeks
+# this means it will keep a year's worth of updates
+# since this is intended to run once a week and there are 52 weeks in a year
+filename=$(echo "update.$(($(date +%V) % 52)).log")
+USERNAME=codabool
+BACKUP_LOCATION=/home/$USERNAME/Documents/update_logs/$filename
+
+if [ ! -d "/home/$USERNAME/Documents/update_logs" ]; then
+    echo "need to create a update_logs folder in ~/Documents/update_logs..."
+    sudo -u $USERNAME mkdir -p /home/$USERNAME/Documents/update_logs
+fi
+
+
+function write_versions() {
+    # write packages and their description
+    # https://superuser.com/questions/1523973/archlinux-pacman-list-installed-packages-with-description?newreg=828a1d0f69b542a88afc8f1a2a35dddc
+    echo -e "\nPackages\n" >> $BACKUP_LOCATION
+    for line in "$(pacman -Qqe)"; do pacman -Qi $(echo "$line") ; done | perl -pe 's/ +/ /gm' | perl -pe 's/^(Groups +: )(.*)/$1($2)/gm' | perl -0777 -pe 's/^Name : (.*)\nVersion :(.*)\nDescription : ((?!None).*)?(?:.|\n)*?Groups :((?! \(None\)$)( )?.*)?(?:.|\n(?!Name))+/$1$2$4\n    $3/gm' | grep -A1 --color -P "^[^\s]+" >> $BACKUP_LOCATION
+
+    echo -e "\n\nFlatpaks\n" >> $BACKUP_LOCATION
+    flatpak list >> $BACKUP_LOCATION
+
+    echo -e "\nkernal = $(uname -r)" >> $BACKUP_LOCATION
+
+    echo -e "\nplasma = $(pacman -Q plasma-desktop)\n" >> $BACKUP_LOCATION
+
+    systemctl --version | head -n 1 >> $BACKUP_LOCATION
+
+    echo -e "\n" >> $BACKUP_LOCATION
+
+    nvidia-smi >> $BACKUP_LOCATION
+}
+
+echo "running as $(whoami)" | tee -a  $BACKUP_LOCATION
+echo "writing to log file '~/Documents/update_logs/$filename' as $USERNAME"
+sudo -u $USERNAME echo $(date) > $BACKUP_LOCATION
+
+echo -e "\n====== Pre-update ======" >> $BACKUP_LOCATION
+
+write_versions
+official_updates=$(sudo -u $USERNAME paru -Syu --print --print-format "update %n" | grep '^update')
+official_update_count=$(echo "$official_updates" | grep -c '^update')
+# -Qua also seems to work
+aur_update_count=$(sudo -u $USERNAME paru -Qumq | wc -l)
+all_update_count=$((aur_update_count + official_update_count))
+
+echo -e "\n========== General ==========\n" >> $BACKUP_LOCATION
+
+echo "disk usage $(df -h / | awk 'NR==2 {print $5}')" >> $BACKUP_LOCATION
+echo -e "scheduled snapshots\n"  >> $BACKUP_LOCATION
+snapper list -t single >> $BACKUP_LOCATION
+
+if [ "$all_update_count" -ne 0 ]; then
+    echo -e "\n=> Official\n" | tee -a $BACKUP_LOCATION
+    updates=$(paru -Su --print-format '%n %v')
+    while IFS= read -r line; do
+        if [ -z "$line" ]; then
+            continue
+        fi
+        package=$(echo "$line" | awk '{print $1}')
+        new_version=$(echo "$line" | awk '{print $2}')
+        current_version=$(paru -Q "$package" | awk '{print $2}')
+        echo "$package $current_version -> $new_version" | tee -a $BACKUP_LOCATION
+    done <<< "$updates"
+
+    echo -e "\n=> AUR\n" | tee -a $BACKUP_LOCATION
+    updates=$(paru -Qum)
+    while IFS= read -r line; do
+        if [ -z "$line" ]; then
+            continue
+        fi
+        package=$(echo "$line" | awk '{print $1}')
+        new_version=$(echo "$line" | awk '{print $2}')
+        current_version=$(paru -Q "$package" | awk '{print $2}')
+        echo "$package $current_version -> $new_version" | tee -a $BACKUP_LOCATION
+    done <<< "$updates"
+fi
+
+echo -e "\n========== Offical ==========\n" | tee -a  $BACKUP_LOCATION
+
+# shouldn't be risk involved with keyring updates, skip making a snapshot for them
+sudo SNAP_PAC_SKIP=y pacman -Sy --noconfirm --noprogressbar --color=always archlinux-keyring && sudo SNAP_PAC_SKIP=n pacman -Su --noconfirm --noprogressbar --color=always | tee -a $BACKUP_LOCATION
+
+# update packages
+echo -e "\n========== AUR ==========\n" | tee -a $BACKUP_LOCATION
+
+# performs update on AUR and official packages
+# requires that your username be given visudo on pacman
+
+# for automatic updates this requires allowing the defined user to run pacman without password
+# this is an unsafe practice and opens your system up for malicious actors
+# never do this on any system where you do not trust 100% of the code running on it
+#   to perform this edit (replace codabool with your username)
+#     sudo su
+#     EDITOR=nano visudo
+#     codabool pom=(ALL:ALL) NOPASSWD: /usr/bin/pacman
+
+sudo SNAP_PAC_SKIP=n -u $USERNAME paru -Syu --skipreview --removemake --nocleanafter --pgpfetch --noconfirm --color=always | tee -a $BACKUP_LOCATION
+
+# ========= Flatpak ======
+# In system settings you can turn on automatic flatpak updates
+# I use weekly with After rebooting
+
+echo -e "\n========== update complete, printing new versions ==========\n" >> $BACKUP_LOCATION
+write_versions
+
+echo -e "\n========== updated! check for action required in official & AUR section ==========\n" | tee -a $BACKUP_LOCATION
+
+
+if [ "$all_update_count" -eq 0 ]; then
+    # TODO: update this message once stable
+    echo "Your system is up to date, no restart is necessary" > /dev/pts/0
+else
+    # Count updates
+    echo -e "\nUpdate count: $all_update_count" | tee -a $BACKUP_LOCATION
+
+    special_updates_exist=false
+    if echo "$official_updates" | grep -qE 'linux|linux-firmware|nvidia-dkms|pipewire|systemd'; then
+        special_updates_exist=true
+    fi
+
+    # create a desktop script to let you know an update was done 
+    # as well as help focus in on the relevant lines of logs
+    echo -e "#!/bin/bash\nawk '/========== General ==========/ {flag=1} /========== update complete, printing new versions ==========/{flag=0} flag' $BACKUP_LOCATION | less -R" > /home/$USERNAME/Desktop/update_logs.sh
+    chmod +x /home/$USERNAME/Desktop/update_logs.sh
+    chown $USERNAME:$USERNAME /home/$USERNAME/Desktop/update_logs.sh
+
+    ternary="Only non-critical"
+    if $special_updates_exist; then
+        ternary="With critical"
+    fi
+
+    echo "$all_update_count packages updated. $ternary updates. Use update_logs. Then perform a restart" > /dev/pts/0
+fi
+
+
+#### helpful commands ####
+
+# list all AUR packages
+#   pacman -Qmqe
+
+# list official packages
+#   pacman -Qqe | grep -vx "$( pacman -Qmqe )"
+
+# list AUR that need updates
+#   paru -Qum (Qua also seems to work)
+
+# list official that need updates, this seems to also include keyring updates
+#   paru -Syu --print --print-format "%n"
+
+
+
+# NOTES
+# - test using --ignore=zed when there are packages you don't want updated
+# - test printing the version change in general
+
+
+# I use systemd timer to perform this
+# here is the .service file
+    # [Unit]
+    # Description=System update
+    # After=network.target
+
+    # [Service]
+    # Type=oneshot
+    # ExecStart=/home/codabool/code/scripts/bash-scripts/update
+
+# and here is the .timer file
+    # [Unit]
+    # Description=System update
+
+    # [Timer]
+    # OnCalendar=Thursday *-*-* 20:00:00 America/New_York
+
+    # [Install]
+    # WantedBy=timers.target

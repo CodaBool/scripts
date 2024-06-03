@@ -1,0 +1,13 @@
+[Unit]
+Description=VPN
+After=network.target
+
+[Service]
+User=root
+ExecStart=/bin/bash ./vpn_auto.sh
+WorkingDirectory=/media/codabool/HDD/Code/scripts/bash-scripts
+Type=exec
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
