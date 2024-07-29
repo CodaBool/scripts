@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# This opens the release page and installs a Docker Desktop tarball
+
+echo -e "click 'Arch' and save to ~/Downloads\n"
+sudo -u codabool brave https://docs.docker.com/desktop/release-notes/
+read -p "Press Enter to install"
+latest_file=$(ls -t /home/codabool/Downloads/docker-desktop-x86_64.pkg.tar.zst | head -1)
+if [ -z "$latest_file" ]; then
+  echo "No Docker Desktop .tar.zst file found in ~/Downloads. Please download the file and try again."
+  exit 1
+fi
+echo "Found file: $latest_file"
+echo "Installing Docker Desktop..."
+sudo pacman -U /home/codabool/Downloads/docker-desktop-x86_64.pkg.tar.zst
+rm /home/codabool/Downloads/docker-desktop-x86_64.pkg.tar.zst

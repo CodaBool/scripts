@@ -1,3 +1,7 @@
+#!/bin/bash
+
+# an attempt at making AWS tail logs more readable
+
 BLACK="\033[1;30m"
 RED="\033[1;31m"
 ORANGE="\033[1;33m"

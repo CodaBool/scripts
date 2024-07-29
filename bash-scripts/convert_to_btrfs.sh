@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# add subvolumes to active folders
+
 [[ "$(id -u)" -eq 0 ]] || (echo "Got root?" ; exit 5)
 command -v btrfs > /dev/null || (echo "Command not found: btrfs" ; exit 4)
 for folder in $* ; do
