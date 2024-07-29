@@ -1,14 +1,24 @@
 #!/bin/bash
 
-# WARN: it's not enough to just let Arch auto update.
-# the output of pacman and paru should be overviewed every week
+# An auto update script for Arch Linux
+# this is an opinionated script which runs weekly and writes logs
+
 # in addition you should be subscribed to the email list of arch news
 # you can do this here: https://lists.archlinux.org
-# to assist with reading the output of the important logs I have this bash function
-# which I use to read the relevant part for action items
-# it can be ran w/o an argument to run this weeks
+
+# this script makes a few assumptions
+#   - using paru
+#   - using flatpaks
+#   - using KDE
+#   - using btrfs + snapper
+#   - using Nvidia
+
+# to assist with reading the output of the important logs I have the below bash function
+# which I use to read the relevant part for actionable items
+# it can be ran w/o an argument to view this weeks output
 # or ran with a week number to see what the output was for that week
-# in addition a script is written to the desktop which performs the same bash code
+
+# alternatively a script is written to Desktop which does runs the same bash function
 
 # update_logs() {
 #   file=${1:-$(date +%V)}
@@ -20,11 +30,12 @@
 # INFO: if you get very slow installs use reflector for the fastest mirrors
 
 # records versions before and after updating
-# updates all of official, AUR, and flatpaks to latest
+# updates all of official, AUR to latest
+# use KDE settings to keep your flatpaks up to date
 
 # this will keep a running log of the last 52 weeks
 # this means it will keep a year's worth of updates
-# since this is intended to run once a week and there are 52 weeks in a year
+
 filename=$(echo "update.$(($(date +%V) % 52)).log")
 USERNAME=codabool
 BACKUP_LOCATION=/home/$USERNAME/Documents/update_logs/$filename
@@ -132,7 +143,6 @@ echo -e "\n========== updated! check for action required in official & AUR secti
 
 
 if [ "$all_update_count" -eq 0 ]; then
-    # TODO: update this message once stable
     echo "Your system is up to date, no restart is necessary" > /dev/pts/0
 else
     # Count updates
@@ -176,7 +186,6 @@ fi
 
 # NOTES
 # - test using --ignore=zed when there are packages you don't want updated
-# - test printing the version change in general
 
 
 # I use systemd timer to perform this
