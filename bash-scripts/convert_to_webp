@@ -1,0 +1,13 @@
+#!/bin/bash
+
+read -p "Enter the quality level (0-100): " quality
+read -p "What file ext are you converting from: " file_ext
+
+# Convert all files to WEBP
+for file in ./*."$file_ext"; do
+  if [ -f "$file" ]; then
+    output="${file%.jpg}.webp"
+    ffmpeg -i "$file" -q:v "$quality" -loglevel warning -y "$output"
+    echo "Converted $file to $output"
+  fi
+done

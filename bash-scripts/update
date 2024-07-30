@@ -39,6 +39,7 @@
 filename=$(echo "update.$(($(date +%V) % 52)).log")
 USERNAME=codabool
 BACKUP_LOCATION=/home/$USERNAME/Documents/update_logs/$filename
+SSD=/dev/nvme2n1
 
 if [ ! -d "/home/$USERNAME/Documents/update_logs" ]; then
     echo "need to create a update_logs folder in ~/Documents/update_logs..."
@@ -84,6 +85,7 @@ echo -e "\n========== General ==========\n" >> $BACKUP_LOCATION
 echo "disk usage $(df -h / | awk 'NR==2 {print $5}')" >> $BACKUP_LOCATION
 echo -e "scheduled snapshots\n"  >> $BACKUP_LOCATION
 snapper list -t single >> $BACKUP_LOCATION
+echo -e "\nSSD write lifespan usage\n$(smartctl -a $SSD | grep 'Percentage Used')\n" | tee -a $BACKUP_LOCATION
 
 if [ "$all_update_count" -ne 0 ]; then
     echo -e "\n=> Official\n" | tee -a $BACKUP_LOCATION
@@ -153,7 +155,7 @@ else
         special_updates_exist=true
     fi
 
-    # create a desktop script to let you know an update was done 
+    # create a desktop script to let you know an update was done
     # as well as help focus in on the relevant lines of logs
     echo -e "#!/bin/bash\nawk '/========== General ==========/ {flag=1} /========== update complete, printing new versions ==========/{flag=0} flag' $BACKUP_LOCATION | less -R" > /home/$USERNAME/Desktop/update_logs.sh
     chmod +x /home/$USERNAME/Desktop/update_logs.sh
