@@ -92,8 +92,7 @@ write_versions
 
 echo -e "\n========== Update Complete ==========\n" | tee -a $BACKUP_LOCATION
 
-sudo -u $USERNAME notify-send "Packages" "all packages running latest" --app-name="Auto DNF Update"
-
+sudo -u $USERNAME DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus notify-send "Packages" "all packages running latest" --app-name="Auto DNF Update"
 # TODO: find the number of packages that get updated
 
 
