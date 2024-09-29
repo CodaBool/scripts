@@ -33,6 +33,11 @@ USERNAME=codabool
 BACKUP_LOCATION=/home/$USERNAME/Documents/update_logs/$filename
 SSD=/dev/nvme2n1p3
 
+# script is used on server and on local, use this to find which
+if [ $# -gt 0 ]; then
+  HEADLESS=true
+fi
+
 if [ ! -d "/home/$USERNAME/Documents/update_logs" ]; then
   echo "need to create a update_logs folder in ~/Documents/update_logs..."
   sudo -u $USERNAME mkdir -p /home/$USERNAME/Documents/update_logs
@@ -47,7 +52,9 @@ function write_versions() {
 
   echo -e "\nkernal = $(uname -r)" >> $BACKUP_LOCATION
 
-  echo -e "\ngnome = $(gnome-shell --version)\n" >> $BACKUP_LOCATION
+  if [ ! "$HEADLESS" ]; then
+    echo -e "\ngnome = $(gnome-shell --version)\n" >> $BACKUP_LOCATION
+  fi
 
   systemctl --version | head -n 1 >> $BACKUP_LOCATION
 
@@ -92,7 +99,10 @@ write_versions
 
 echo -e "\n========== Update Complete ==========\n" | tee -a $BACKUP_LOCATION
 
-sudo -u $USERNAME DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus notify-send "Packages" "all packages running latest" --app-name="Auto DNF Update"
+if [ ! "$HEADLESS" ]; then
+  sudo -u $USERNAME DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus notify-send "Packages" "all packages running latest" --app-name="Auto DNF Update"
+fi
+
 # TODO: find the number of packages that get updated
 
 
