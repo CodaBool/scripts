@@ -1,7 +1,6 @@
 filename=$(echo "update.$(($(date +%V) % 52)).log")
 USERNAME=codabool
-BACKUP_LOCATION=/home/$USERNAME/Documents/update_logs/flatpak_$filename
-SSD=/dev/nvme2n1p3
+BACKUP_LOCATION=/home/$USERNAME/Documents/update_logs/flatpak.$filename
 
 function write_versions() {
   echo -e "\n========== Pre-Update Check Versions ==========\n" >> $BACKUP_LOCATION
@@ -9,7 +8,7 @@ function write_versions() {
 }
 
 echo "running as $(whoami)" | tee -a  $BACKUP_LOCATION
-echo "writing to log file '~/Documents/update_logs/flatpak_$filename' as $USERNAME"
+echo "writing to log file '~/Documents/update_logs/flatpak.$filename' as $USERNAME"
 echo $(date) > $BACKUP_LOCATION
 write_versions
 

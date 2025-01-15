@@ -6,7 +6,6 @@
 # this script makes a few assumptions
 #   - using flatpaks
 #   - using GNOME
-#   - using btrfs
 #   - using Nvidia
 
 # to assist with reading the output of the important logs I have the below bash function
@@ -31,7 +30,7 @@
 filename=$(echo "update.$(($(date +%V) % 52)).log")
 USERNAME=codabool
 BACKUP_LOCATION=/home/$USERNAME/Documents/update_logs/$filename
-SSD=/dev/nvme2n1p3
+SSD=/dev/nvme0n1p3
 
 # script is used on server and on local, use this to find which
 if [ $# -gt 0 ]; then
@@ -76,7 +75,7 @@ echo -e "\n========== General ==========\n" >> $BACKUP_LOCATION
 echo "disk usage $(df -h / | awk 'NR==2 {print $5}')" >> $BACKUP_LOCATION
 #echo -e "scheduled snapshots\n"  >> $BACKUP_LOCATION
 #snapper list -t single >> $BACKUP_LOCATION
-echo -e "\nSSD write lifespan usage\n$(smartctl -a $SSD | grep 'Percentage Used')\n" >> $BACKUP_LOCATION
+echo -e "\nSSD lifespan $(smartctl -a $SSD | grep Percentage)\n" >> $BACKUP_LOCATION
 
 echo -e "\n========== Update Packages ==========\n" | tee -a  $BACKUP_LOCATION
 
@@ -87,7 +86,7 @@ echo -e "\n========== Update Packages ==========\n" | tee -a  $BACKUP_LOCATION
 #     sudo su
 #     EDITOR=nano visudo
 #     # can use hostnamectl to find the hostname, for me its "pom"
-#     codabool pom=(ALL:ALL) NOPASSWD: /usr/bin/dnf
+#     codabool pom=(codabool:root) NOPASSWD: /usr/bin/dnf
 
 # TODO: get the number of updates this will perform, should be able to use "check-update"
 # dnf check-update| grep -Ec ' updates$'
